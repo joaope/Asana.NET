@@ -8,7 +8,7 @@ using Asana.Models.Results;
 
 namespace Asana.Requests
 {
-    public abstract class ItemRequest<TData> : Request where TData : IData
+    public abstract class ItemRequest<TData> : Request where TData : class, IData
     {
         protected abstract HttpMethod HttpMethod { get; }
 

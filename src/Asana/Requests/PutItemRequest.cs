@@ -4,7 +4,7 @@ using Asana.Models;
 
 namespace Asana.Requests
 {
-    public sealed class PutItemRequest<TData> : ItemRequest<TData> where TData : IData
+    public sealed class PutItemRequest<TData> : ItemRequest<TData> where TData : class, IData
     {
         protected override HttpMethod HttpMethod => HttpMethod.Put;
 

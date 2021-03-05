@@ -9,7 +9,7 @@ using Asana.Models.Results;
 
 namespace Asana.Requests
 {
-    public sealed class GetItemsCollectionRequest<TData> : Request where TData : IData
+    public sealed class GetItemsCollectionRequest<TData> : Request where TData : class, IData
     {
         public GetItemsCollectionRequest(Dispatcher dispatcher, string requestPath) : base(dispatcher, requestPath)
         {
@@ -29,7 +29,7 @@ namespace Asana.Requests
         public new GetItemsCollectionRequest<TData> PrettyOutput(bool pretty) =>
             (GetItemsCollectionRequest<TData>) base.PrettyOutput(pretty);
 
-        private async Task<ResultsCollection<TData>> InternalExecute(CancellationToken cancellationToken, uint? limit, string offset)
+        private async Task<ResultsCollection<TData>> InternalExecute(CancellationToken cancellationToken, uint? limit, string? offset)
         {
             if (limit.HasValue)
             {

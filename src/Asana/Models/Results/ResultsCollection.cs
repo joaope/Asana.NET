@@ -7,16 +7,16 @@ using Newtonsoft.Json;
 
 namespace Asana.Models.Results
 {
-    public sealed class ResultsCollection<TData> where TData : IData
+    public sealed class ResultsCollection<TData> where TData : class, IData
     {
-        public Error[] Errors { get; }
+        public Error[] Errors { get; } = new Error[0];
         public HttpStatusCode HttpStatusCode { get; }
-        public TData[] Data { get; }
-        public NextPageInformation NextPage { get; }
+        public TData[]? Data { get; }
+        public NextPageInformation? NextPage { get; }
         public bool HasNextPage => NextPage != null;
         public bool IsError { get; }
 
-        private ResultsCollection(HttpStatusCode httpStatusCode, IEnumerable<TData> data, NextPageInformation nextPage)
+        private ResultsCollection(HttpStatusCode httpStatusCode, IEnumerable<TData> data, NextPageInformation? nextPage)
         {
             Data = data?.ToArray() ?? new TData[0];
             HttpStatusCode = httpStatusCode;

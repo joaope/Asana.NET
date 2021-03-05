@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 
 namespace Asana.Models.Results
 {
-    public sealed class Result<TData> where TData : IData
+    public sealed class Result<TData> where TData : class, IData
     {
-        public Error[] Errors { get; }
+        public Error[]? Errors { get; }
         public HttpStatusCode HttpStatusCode { get; }
-        public TData Data { get; }
+        public TData? Data { get; }
         public bool IsError { get; }
 
         private Result(HttpStatusCode httpStatusCode)

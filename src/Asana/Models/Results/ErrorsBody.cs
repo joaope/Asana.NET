@@ -9,7 +9,7 @@ namespace Asana.Models.Results
         public Error[] Errors { get; }
 
         [JsonConstructor]
-        public ErrorsBody(IEnumerable<Error> errors)
+        public ErrorsBody(IEnumerable<Error>? errors)
         {
             Errors = errors?.ToArray() ?? new Error[0];
         }

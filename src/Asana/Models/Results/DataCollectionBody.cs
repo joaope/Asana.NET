@@ -8,14 +8,14 @@ namespace Asana.Models.Results
     {
         public TData[] Data { get; }
         [JsonProperty("next_page")]
-        public NextPageInformation NextPage { get; }
+        public NextPageInformation? NextPage { get; }
 
         public DataCollectionBody(IEnumerable<TData> data) : this(data, null)
         {
         }
 
         [JsonConstructor]
-        public DataCollectionBody(IEnumerable<TData> data, NextPageInformation nextPage)
+        public DataCollectionBody(IEnumerable<TData> data, NextPageInformation? nextPage)
         {
             NextPage = nextPage;
             Data = data?.ToArray() ?? new TData[0];
