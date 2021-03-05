@@ -5,9 +5,12 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana", "src\Asana\Asana.csproj", "{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.Console", "src\Asana.Console\Asana.Console.csproj", "{02014F4C-995C-4EAF-A207-C776296191DD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E72D8866-21B1-4630-928E-05248B4657E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{9CEE84BE-941D-4D2C-B343-1D5E903AB5D4}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,17 +22,12 @@ Global
 		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02014F4C-995C-4EAF-A207-C776296191DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02014F4C-995C-4EAF-A207-C776296191DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02014F4C-995C-4EAF-A207-C776296191DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02014F4C-995C-4EAF-A207-C776296191DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD} = {E72D8866-21B1-4630-928E-05248B4657E1}
-		{02014F4C-995C-4EAF-A207-C776296191DD} = {E72D8866-21B1-4630-928E-05248B4657E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}
