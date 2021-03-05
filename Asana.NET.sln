@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana", "Asana\Asana.csproj", "{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana", "src\Asana\Asana.csproj", "{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Console", "Asana.Console\Asana.Console.csproj", "{02014F4C-995C-4EAF-A207-C776296191DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.Console", "src\Asana.Console\Asana.Console.csproj", "{02014F4C-995C-4EAF-A207-C776296191DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E72D8866-21B1-4630-928E-05248B4657E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD} = {E72D8866-21B1-4630-928E-05248B4657E1}
+		{02014F4C-995C-4EAF-A207-C776296191DD} = {E72D8866-21B1-4630-928E-05248B4657E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}
