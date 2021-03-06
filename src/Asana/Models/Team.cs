@@ -2,9 +2,8 @@
 
 namespace Asana.Models
 {
-    public sealed class Team : AsanaResource
+    public sealed class Team : AsanaNamedResource
     {
-        public string Name { get; }
         public string Description { get; }
         [JsonProperty("html_description")]
         public string HtmlDescription { get; }
@@ -19,9 +18,8 @@ namespace Asana.Models
             string description,
             string htmlDescription,
             Workspace organization,
-            string permaLinkUrl) : base(gid, resourceType)
+            string permaLinkUrl) : base(gid, resourceType, name)
         {
-            Name = name;
             Description = description;
             HtmlDescription = htmlDescription;
             Organization = organization;

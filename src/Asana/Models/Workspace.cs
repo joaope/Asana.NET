@@ -2,21 +2,18 @@
 
 namespace Asana.Models
 {
-    public sealed class Workspace : AsanaResource
+    public sealed class Workspace : AsanaNamedResource
     {
-        public const string NameFieldName = "name";
-        public const string IsOrganizationFieldName = "is_organization";
-
-        [JsonProperty(NameFieldName)]
-        public string Name { get; }
-        [JsonProperty(IsOrganizationFieldName)]
+        [JsonProperty("is_organization")]
         public bool IsOrganization { get; }
+        [JsonProperty("email_domains")]
+        public string EmailDomains { get; }
 
         [JsonConstructor]
-        internal Workspace(string gid, string resourceType, string name, bool isOrganization) : base(gid, resourceType)
+        internal Workspace(string gid, string resourceType, string name, bool isOrganization, string emailDomains) : base(gid, resourceType, name)
         {
-            Name = name;
             IsOrganization = isOrganization;
+            EmailDomains = emailDomains;
         }
     }
 }

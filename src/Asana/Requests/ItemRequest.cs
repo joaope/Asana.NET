@@ -25,7 +25,7 @@ namespace Asana.Requests
         public new ItemRequest<TData> AddFields(IEnumerable<string> fieldNames) =>
             (ItemRequest<TData>) base.AddFields(fieldNames);
 
-        public new ItemRequest<TData> AddQueryParameter(string name, string value) => (ItemRequest<TData>)base.AddQueryParameter(name, value);
+        public new ItemRequest<TData> AddQueryParameter(string name, string? value) => (ItemRequest<TData>)base.AddQueryParameter(name, value);
 
         public new ItemRequest<TData> PrettyOutput(bool pretty) =>
             (ItemRequest<TData>) base.PrettyOutput(pretty);

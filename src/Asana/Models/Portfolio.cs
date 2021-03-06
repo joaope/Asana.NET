@@ -3,9 +3,8 @@ using Newtonsoft.Json;
 
 namespace Asana.Models
 {
-    public sealed class Portfolio : AsanaResource
+    public sealed class Portfolio : AsanaNamedResource
     {
-        public string Name { get; }
         public User Owner { get; }
         [JsonProperty("created_at")]
         public DateTime? CreatedAt { get; }
@@ -25,9 +24,21 @@ namespace Asana.Models
         public CustomFieldSetting[] CustomFieldSettings { get; set; }
 
         [JsonConstructor]
-        internal Portfolio(string gid, string resourceType, string name, User owner, DateTime? createdAt, User createdBy, Workspace workspace, DateTime? startOn, DateTime? dueOn, string permaLink, User[] members, string color, CustomFieldSetting[] customFieldSettings) : base(gid, resourceType)
+        internal Portfolio(
+            string gid,
+            string resourceType,
+            string name,
+            User owner,
+            DateTime? createdAt,
+            User createdBy,
+            Workspace workspace,
+            DateTime? startOn,
+            DateTime? dueOn,
+            string permaLink,
+            User[] members,
+            string color,
+            CustomFieldSetting[] customFieldSettings) : base(gid, resourceType, name)
         {
-            Name = name;
             Owner = owner;
             CreatedAt = createdAt;
             CreatedBy = createdBy;

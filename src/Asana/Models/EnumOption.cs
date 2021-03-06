@@ -2,16 +2,14 @@
 
 namespace Asana.Models
 {
-    public sealed class EnumOption : AsanaResource
+    public sealed class EnumOption : AsanaNamedResource
     {
-        public string Name { get; }
         public bool Enabled { get; }
         public string Color { get; }
 
         [JsonConstructor]
-        internal EnumOption(string gid, string resourceType, string name, bool enabled, string color) : base(gid, resourceType)
+        internal EnumOption(string gid, string resourceType, string name, bool enabled, string color) : base(gid, resourceType, name)
         {
-            Name = name;
             Enabled = enabled;
             Color = color;
         }

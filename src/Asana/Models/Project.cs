@@ -3,9 +3,8 @@ using Newtonsoft.Json;
 
 namespace Asana.Models
 {
-    public sealed class Project : AsanaResource
+    public sealed class Project : AsanaNamedResource
     {
-        public string Name { get; }
         public bool Archived { get; }
         public string Color { get; }
         [JsonProperty("created_at")]
@@ -63,9 +62,8 @@ namespace Asana.Models
             string htmlNotes,
             Workspace workspace,
             string defaultView,
-            ProjectStatus currentStatus) : base(gid, resourceType)
+            ProjectStatus currentStatus) : base(gid, resourceType, name)
         {
-            Name = name;
             Archived = archived;
             Color = color;
             CreatedAt = createdAt;

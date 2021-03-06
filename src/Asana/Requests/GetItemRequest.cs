@@ -11,5 +11,9 @@ namespace Asana.Requests
         public GetItemRequest(Dispatcher dispatcher, string requestPath) : base(dispatcher, requestPath)
         {
         }
+
+
+        public new GetItemRequest<TData> AddQueryParameter(string name, string value) => (GetItemRequest<TData>)base.AddQueryParameter(name, value);
+
     }
 }

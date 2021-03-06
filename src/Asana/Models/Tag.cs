@@ -3,9 +3,8 @@ using Newtonsoft.Json;
 
 namespace Asana.Models
 {
-    public sealed class Tag : AsanaResource
+    public sealed class Tag : AsanaNamedResource
     {
-        public string Name { get; }
         public string Color { get; }
         [JsonProperty("created_at")]
         public DateTime? CreatedAt { get; }
@@ -20,9 +19,8 @@ namespace Asana.Models
             string color,
             DateTime? createdAt,
             Workspace workspace,
-            User[] followers) : base(gid, resourceType)
+            User[] followers) : base(gid, name, resourceType)
         {
-            Name = name;
             Color = color;
             CreatedAt = createdAt;
             Workspace = workspace;

@@ -94,8 +94,13 @@ namespace Asana.Requests
             return this;
         }
 
-        public Request AddQueryParameter(string key, string value)
+        public Request AddQueryParameter(string key, string? value)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return this;
+            }
+
             _query.Add(key, value);
             return this;
         }

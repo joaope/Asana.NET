@@ -2,7 +2,7 @@
 
 namespace Asana.Models
 {
-    public sealed class CustomField : AsanaResource
+    public sealed class CustomField : AsanaNamedResource
     {
         [JsonProperty("resource_subtype")]
         public string ResourceSubType { get; }
@@ -12,7 +12,6 @@ namespace Asana.Models
         public EnumOption[] EnumOptions { get; }
         [JsonProperty("has_notifications_enabled")]
         public bool HasNotificationsEnabled { get; }
-        public string Name { get; }
         [JsonProperty("created_by")]
         public User CreatedBy { get; }
         [JsonProperty("currency_code")]
@@ -36,11 +35,11 @@ namespace Asana.Models
         internal CustomField(
             string gid,
             string resourceType,
+            string name,
             string resourceSubType,
             bool isGlobalToWorkspace,
             EnumOption[] enumOptions,
             bool hasNotificationsEnabled,
-            string name,
             User createdBy,
             string? currencyCode,
             string? customLabel,
@@ -52,13 +51,12 @@ namespace Asana.Models
             int precision,
             string? textValue,
             string type,
-            EnumOption enumValue) : base(gid, resourceType)
+            EnumOption enumValue) : base(gid, resourceType, name)
         {
             ResourceSubType = resourceSubType;
             IsGlobalToWorkspace = isGlobalToWorkspace;
             EnumOptions = enumOptions;
             HasNotificationsEnabled = hasNotificationsEnabled;
-            Name = name;
             CreatedBy = createdBy;
             CurrencyCode = currencyCode;
             CustomLabel = customLabel;

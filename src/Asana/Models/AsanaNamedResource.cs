@@ -2,7 +2,7 @@
 
 namespace Asana.Models
 {
-    public sealed class AsanaNamedResource : AsanaResource
+    public class AsanaNamedResource : AsanaResource
     {
         public string Name { get; }
 

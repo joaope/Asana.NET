@@ -2,9 +2,8 @@
 
 namespace Asana.Models
 {
-    public sealed class Job : AsanaResource
+    public sealed class Job : AsanaNamedResource
     {
-        public string Name { get; }
         [JsonProperty("resource_subtype")]
         public string ResourceSubType { get; }
         public string Status { get; }
@@ -14,13 +13,13 @@ namespace Asana.Models
         public Project NewProject { get; }
 
         [JsonConstructor]
-        internal Job(string gid, string resourceType, string resourceSubType, string status, Task newTask, Project newProject, string name) : base(gid, resourceType)
+        internal Job(string gid, string resourceType, string resourceSubType, string status, Task newTask, Project newProject, string name) 
+            : base(gid, resourceType, name)
         {
             ResourceSubType = resourceSubType;
             Status = status;
             NewTask = newTask;
             NewProject = newProject;
-            Name = name;
         }
     }
 }

@@ -3,29 +3,44 @@ using Newtonsoft.Json;
 
 namespace Asana.Models
 {
-    public sealed class Task : AsanaResource
+    public sealed class Task : AsanaNamedResource
     {
-        public string Name { get; }
+        [JsonProperty("approval_status")]
         public string ApprovalStatus { get; }
         public bool Completed { get; }
+        [JsonProperty("completed_at")]
         public DateTime? CompletedAt { get; }
+        [JsonProperty("completed_by")]
         public User CompletedBy { get; }
         public AsanaResource[] Dependencies { get; }
         public AsanaResource[] Dependents { get; }
+        [JsonProperty("due_at")]
         public DateTime? DueAt { get; }
+        [JsonProperty("due_on")]
         public DateTime? DueOn { get; }
+        [JsonProperty("html_notes")] 
+        public string HtmlNotes { get; set; }
+        [JsonProperty("is_rendered_as_separator")]
+        public bool IsRenderedAsSeparator { get; set; }
         public bool Liked { get; }
         public User[] Likes { get; }
+        [JsonProperty("modified_at")]
         public DateTime? ModifiedAt { get; }
         public string Notes { get; }
+        [JsonProperty("num_likes")]
         public int NumberOfLikes { get; }
+        [JsonProperty("num_subtasks")]
         public int NumberOfSubTasks { get; }
+        [JsonProperty("resource_subtype")]
         public string ResourceSubType { get; }
+        [JsonProperty("start_on")]
         public DateTime? StartOn { get; }
         public User Assignee { get; }
+        [JsonProperty("custom_fields")]
         public CustomField[] CustomFields { get; }
         public User[] Followers { get; }
         public AsanaResource? Parent { get; }
+        [JsonProperty("permalink_url")]
         public string PermaLinkUrl { get; }
         public Project[] Projects { get; }
         public Tag[] Tags { get; }
@@ -44,6 +59,8 @@ namespace Asana.Models
             AsanaResource[] dependents,
             DateTime? dueAt,
             DateTime? dueOn,
+            string htmlNotes,
+            bool isRenderedAsSeparator,
             bool liked,
             User[] likes,
             DateTime? modifiedAt,
@@ -59,9 +76,10 @@ namespace Asana.Models
             string permaLinkUrl,
             Project[] projects,
             Tag[] tags,
-            Workspace workspace) : base(gid, resourceType)
+            Workspace workspace) : base(gid,
+            resourceType,
+            name)
         {
-            Name = name;
             ApprovalStatus = approvalStatus;
             Completed = completed;
             CompletedAt = completedAt;
@@ -70,6 +88,8 @@ namespace Asana.Models
             Dependents = dependents;
             DueAt = dueAt;
             DueOn = dueOn;
+            HtmlNotes = htmlNotes;
+            IsRenderedAsSeparator = isRenderedAsSeparator;
             Liked = liked;
             Likes = likes;
             ModifiedAt = modifiedAt;

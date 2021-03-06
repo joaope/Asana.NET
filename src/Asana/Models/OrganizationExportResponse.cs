@@ -3,14 +3,13 @@ using Newtonsoft.Json;
 
 namespace Asana.Models
 {
-    public sealed class OrganizationExportResponse : AsanaResource
+    public sealed class OrganizationExportResponse : AsanaNamedResource
     {
         [JsonProperty("created_at")]
         public DateTime? CreatedAt { get; }
         [JsonProperty("download_url")]
         public string DownloadUrl { get; }
         public Workspace Organization { get; }
-        public string Name { get; }
         public string State { get; }
 
         [JsonConstructor]
@@ -21,12 +20,11 @@ namespace Asana.Models
             string downloadUrl,
             Workspace organization,
             string name,
-            string state) : base(gid, resourceType)
+            string state) : base(gid, resourceType, name)
         {
             CreatedAt = createdAt;
             DownloadUrl = downloadUrl;
             Organization = organization;
-            Name = name;
             State = state;
         }
     }
