@@ -3,7 +3,7 @@ using Asana.Resources;
 
 namespace Asana
 {
-    public sealed class AsanaClient
+    public sealed class AsanaClient : IAsanaClient
     {
         public Dispatcher Dispatcher { get; }
 
