@@ -5,20 +5,6 @@ using System.Net;
 
 namespace Asana
 {
-    public readonly struct AsanaClientOptions
-    {
-        public uint DefaultPageSize { get; }
-        public uint? DefaultLimit { get; }
-        public RetryPolicyOptions RetryPolicy { get; }
-
-        public AsanaClientOptions(uint defaultPageSize, uint? defaultLimit, RetryPolicyOptions retryPolicy)
-        {
-            DefaultPageSize = defaultPageSize;
-            DefaultLimit = defaultLimit;
-            RetryPolicy = retryPolicy;
-        }
-    }
-
     public readonly struct RetryPolicyOptions
     {
         public HttpStatusCode[] HttpStatusCodes { get; }
