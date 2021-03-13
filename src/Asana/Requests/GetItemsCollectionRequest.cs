@@ -41,7 +41,7 @@ namespace Asana.Requests
                 AddQueryParameter("offset", $"{offset}");
             }
 
-            var response = await Dispatcher.SendAsync(new HttpRequestMessage(HttpMethod.Get, RequestUrl), cancellationToken);
+            var response = await Dispatcher.Send(new HttpRequestMessage(HttpMethod.Get, RequestUrl), cancellationToken);
             return await ResultsCollection<TData>.FromHttpResponse(response);
         }
 

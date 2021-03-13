@@ -40,7 +40,7 @@ namespace Asana.Requests
                 request.Content = Content;
             }
 
-            var response = await Dispatcher.SendAsync(request, cancellationToken);
+            var response = await Dispatcher.Send(request, cancellationToken);
 
             return await Result<TData>.FromHttpResponse(response);
         }
