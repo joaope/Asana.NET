@@ -24,7 +24,8 @@ namespace Asana.Requests
         public new GetItemsCollectionRequest<TData> AddFields(IEnumerable<string> fieldNames) =>
             (GetItemsCollectionRequest<TData>)base.AddFields(fieldNames);
 
-        public new GetItemsCollectionRequest<TData> AddQueryParameter(string name, string? value) => (GetItemsCollectionRequest<TData>)base.AddQueryParameter(name, value);
+        public new GetItemsCollectionRequest<TData> AddQueryParameter(string name, string? value) => 
+            (GetItemsCollectionRequest<TData>)base.AddQueryParameter(name, value);
 
         public new GetItemsCollectionRequest<TData> PrettyOutput(bool pretty) =>
             (GetItemsCollectionRequest<TData>) base.PrettyOutput(pretty);
@@ -79,7 +80,8 @@ namespace Asana.Requests
             ExecuteAsEnumerable(limit, CancellationToken.None);
 
         public async IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable(
-            uint limit, [EnumeratorCancellation]CancellationToken cancellationToken)
+            uint limit,
+            [EnumeratorCancellation]CancellationToken cancellationToken)
         {
             if (limit < 1 || limit > 100)
             {

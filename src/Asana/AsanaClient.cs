@@ -5,6 +5,7 @@ namespace Asana
 {
     public sealed class AsanaClient : IAsanaClient
     {
+        private readonly AsanaClientOptions _options;
         public Dispatcher Dispatcher { get; }
 
         public AsanaClient(Dispatcher dispatcher)
@@ -12,13 +13,15 @@ namespace Asana
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
-        public AsanaClient(string accessToken)
+        public AsanaClient(string accessToken, AsanaClientOptions options)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
             }
-            Dispatcher = new AccessTokenDispatcher(accessToken);
+
+            _options = options;
+            Dispatcher = new AccessTokenDispatcher(_options.RetryPolicy, accessToken);
         }
 
         public Attachments Attachments => new Attachments(Dispatcher);
