@@ -36,7 +36,7 @@ namespace Asana.Resources
 
         public PostItemRequest<EmptyData> AddTask(string sectionGid, object data)
         {
-            return new PostItemRequest<EmptyData>(Dispatcher, $"sections/{sectionGid}/addTask");
+            return new PostItemRequest<EmptyData>(Dispatcher, $"sections/{sectionGid}/addTask").AddData(data);
         }
 
         public PostItemRequest<EmptyData> Insert(string projectGid, object data)
