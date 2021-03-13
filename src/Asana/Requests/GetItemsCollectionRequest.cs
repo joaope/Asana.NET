@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Asana.Dispatchers;
 using Asana.Models;
 using Asana.Models.Results;
 
@@ -41,7 +41,7 @@ namespace Asana.Requests
                 AddQueryParameter("offset", $"{offset}");
             }
 
-            var response = await Dispatcher.AuthenticatedHttpClient.GetAsync(RequestUrl, cancellationToken);
+            var response = await Dispatcher.SendAsync(new HttpRequestMessage(HttpMethod.Get, RequestUrl), cancellationToken);
             return await ResultsCollection<TData>.FromHttpResponse(response);
         }
 

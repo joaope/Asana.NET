@@ -1,6 +1,4 @@
-﻿using Asana.Dispatchers;
-
-namespace Asana.Resources
+﻿namespace Asana.Resources
 {
     public abstract class Resource
     {

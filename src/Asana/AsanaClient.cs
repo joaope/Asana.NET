@@ -1,18 +1,24 @@
 ﻿using System;
-using Asana.Dispatchers;
 using Asana.Resources;
 
 namespace Asana
 {
-    public sealed class Client
+    public sealed class AsanaClient
     {
-        public static Uri ApiBaseUri => new Uri("https://app.asana.com/api/1.0/");
+        public Dispatcher Dispatcher { get; }
 
-        internal Dispatcher Dispatcher { get; }
-
-        private Client(Dispatcher dispatcher)
+        public AsanaClient(Dispatcher dispatcher)
         {
-            Dispatcher = dispatcher;
+            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+        }
+
+        public AsanaClient(string accessToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
+            }
+            Dispatcher = new AccessTokenDispatcher(accessToken);
         }
 
         public Attachments Attachments => new Attachments(Dispatcher);
@@ -39,7 +45,5 @@ namespace Asana
         public Webhooks Webhooks => new Webhooks(Dispatcher);
         public Workspaces Workspaces => new Workspaces(Dispatcher);
         public WorkspaceMemberships WorkspaceMemberships => new WorkspaceMemberships(Dispatcher);
-
-        public static Client FromAccessToken(string accessToken) => new Client(new AccessTokenDispatcher(ApiBaseUri, accessToken));
     }
 }

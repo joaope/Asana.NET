@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Asana.Dispatchers;
 using Asana.Models;
 using Asana.Models.Results;
 
@@ -41,7 +40,7 @@ namespace Asana.Requests
                 request.Content = Content;
             }
 
-            var response = await Dispatcher.AuthenticatedHttpClient.SendAsync(request, cancellationToken);
+            var response = await Dispatcher.SendAsync(request, cancellationToken);
 
             return await Result<TData>.FromHttpResponse(response);
         }
