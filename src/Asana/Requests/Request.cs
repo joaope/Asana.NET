@@ -46,11 +46,11 @@ namespace Asana.Requests
 
                         if (string.IsNullOrEmpty(value))
                         {
-                            sb.Append(Uri.EscapeUriString(key));
+                            sb.Append(Uri.EscapeDataString(key));
                         }
                         else
                         {
-                            sb.AppendFormat("{0}={1}", Uri.EscapeUriString(key), Uri.EscapeDataString(value));
+                            sb.AppendFormat("{0}={1}", Uri.EscapeDataString(key), Uri.EscapeDataString(value));
                         }
                     }
                 }
