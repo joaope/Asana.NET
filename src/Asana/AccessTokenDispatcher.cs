@@ -16,7 +16,7 @@ namespace Asana
             return Send(request, cancellationToken);
         }
 
-        internal AccessTokenDispatcher(string accessToken)
+        internal AccessTokenDispatcher(RetryPolicyOptions retryPolicy, string accessToken) : base(retryPolicy)
         {
             if (string.IsNullOrEmpty(accessToken))
             {

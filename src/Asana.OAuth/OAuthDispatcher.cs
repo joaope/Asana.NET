@@ -33,7 +33,8 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
+        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, RetryPolicyOptions? retryPolicy) 
+            : base(retryPolicy ?? RetryPolicyOptions.Default)
         {
             if (string.IsNullOrEmpty(clientId))
             {
@@ -57,6 +58,11 @@ namespace Asana.OAuth
             _authClient = new HttpClient();
         }
 
+        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
+            : this(clientId, clientSecret, redirectUrl, null)
+        {
+        }
+
         public OAuthDispatcher(string clientId, string clientSecret) : this(clientId, clientSecret, NativeRedirectUrl)
         {
         }
@@ -73,7 +79,7 @@ namespace Asana.OAuth
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                await RefreshToken();
+                await InternalRefreshToken(true);
             }
 
             return response;
@@ -122,26 +128,38 @@ namespace Asana.OAuth
             return _tokenResponse;
         }
 
-        public async Task<TokenResponse> RefreshToken()
+        public Task<TokenResponse> RefreshToken() => InternalRefreshToken(false)!;
+
+        private async Task<TokenResponse?> InternalRefreshToken(bool quiet)
         {
             if (_tokenResponse == null)
             {
-                throw new OAuthException(
+                if (!quiet)
+                {
+                    throw new OAuthException(
                     "Refreshing token failed because the user is not authenticated. " +
                     $"Try starting OAuth authorization process again by calling '{nameof(AuthorizeCode)}' with a new authorization code.");
+                }
+
+                return null;
             }
 
             var discovery = await _discoveryCache.GetAsync();
 
             if (discovery.IsError)
             {
-                throw new OAuthException(
+                if (!quiet)
+                {
+                    throw new OAuthException(
                     $"Error while refreshing access token. OpenID Connect Discovery failed for {DiscoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
                     discovery.HttpErrorReason,
                     discovery.ErrorType,
                     discovery.Exception);
+                }
+
+                return null;
             }
 
             var response = await _authClient.RequestRefreshTokenAsync(new RefreshTokenRequest
@@ -156,13 +174,18 @@ namespace Asana.OAuth
             {
                 _tokenResponse = null;
 
-                throw new OAuthException(
-                    "Error while refreshing authorization access token. Check exception properties for more detailed information.",
-                    response.Error,
-                    response.ErrorDescription,
-                    response.HttpErrorReason,
-                    response.ErrorType,
-                    response.Exception);
+                if (!quiet)
+                {
+                    throw new OAuthException(
+                        "Error while refreshing authorization access token. Check exception properties for more detailed information.",
+                        response.Error,
+                        response.ErrorDescription,
+                        response.HttpErrorReason,
+                        response.ErrorType,
+                        response.Exception);
+                }
+
+                return null;
             }
 
             _tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(response.Raw);
@@ -188,21 +211,6 @@ namespace Asana.OAuth
                     discovery.Exception);
             }
 
-            return GetAuthorizationUrl(
-                discovery.AuthorizeEndpoint,
-                clientId,
-                redirectUrl,
-                state,
-                scopes);
-        }
-
-        public string GetAuthorizationUrl(
-            string authorizationEndpointUrl,
-            string clientId,
-            string redirectUrl,
-            string? state,
-            IEnumerable<OAuthScope>? scopes)
-        {
             scopes ??= new[] {OAuthScope.Default};
 
             var queryStringParams = new NameValueCollection
@@ -228,7 +236,7 @@ namespace Asana.OAuth
                     .ToArray());
             }
 
-            var uriBuilder = new UriBuilder(authorizationEndpointUrl)
+            var uriBuilder = new UriBuilder(discovery.AuthorizeEndpoint)
             {
                 Query = ToQueryString(queryStringParams)
             };
