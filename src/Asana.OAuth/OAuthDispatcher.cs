@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,8 +17,6 @@ namespace Asana.OAuth
     {
         public const string NativeRedirectUrl = "urn:ietf:wg:oauth:2.0:oob";
 
-        public override bool IsAuthenticated => !string.IsNullOrEmpty(_tokenResponse?.AccessToken);
-
         private const string DiscoveryEndpointUrl = "https://app.asana.com/api/1.0/.well-known/openid-configuration";
 
         private readonly string _clientId;
@@ -27,6 +26,12 @@ namespace Asana.OAuth
         private readonly HttpClient _authClient;
 
         private TokenResponse? _tokenResponse;
+
+        public TimeSpan ApiDiscoveryCacheDuration
+        {
+            get => _discoveryCache.CacheDuration;
+            set => _discoveryCache.CacheDuration = value;
+        }
 
         public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
         {
@@ -56,16 +61,22 @@ namespace Asana.OAuth
         {
         }
 
-        protected override void OnBeforeSendRequest(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (IsAuthenticated)
+            if (_tokenResponse != null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue(_tokenResponse!.TokenType, _tokenResponse!.AccessToken);
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue(_tokenResponse.TokenType, _tokenResponse.AccessToken);
             }
-            else
+
+            var response = await Send(request, cancellationToken);
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                // TODO: throw
+                await RefreshToken();
             }
+
+            return response;
         }
 
         public async Task<TokenResponse> AuthorizeCode(string code)

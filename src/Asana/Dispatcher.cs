@@ -12,11 +12,9 @@ namespace Asana
 
         private readonly HttpClient _httpClient;
 
-        public abstract bool IsAuthenticated { get; }
-
         protected Dispatcher()
         {
-            _httpClient = new HttpClient(new HttpMessageHandler())
+            _httpClient = new HttpClient(new InternalHttpMessageHandler(HandleSend))
             {
                 BaseAddress = ApiBaseUri,
                 DefaultRequestHeaders =
@@ -26,26 +24,25 @@ namespace Asana
             };
         }
 
-        protected abstract void OnBeforeSendRequest(HttpRequestMessage request, CancellationToken cancellationToken);
+        protected abstract Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken);
 
-        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public Task<HttpResponseMessage> Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            OnBeforeSendRequest(request, cancellationToken);
             return _httpClient.SendAsync(request, cancellationToken);
         }
 
-        private sealed class HttpMessageHandler : DelegatingHandler
+        private sealed class InternalHttpMessageHandler : DelegatingHandler
         {
-            public HttpMessageHandler() : base(new HttpClientHandler())
+            private readonly Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> _sendHandler;
+
+            public InternalHttpMessageHandler(Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> sendHandler) 
+                : base(new HttpClientHandler())
             {
+                _sendHandler = sendHandler;
             }
 
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                return base.SendAsync(request, cancellationToken);
-            }
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+                CancellationToken cancellationToken) => _sendHandler(request, cancellationToken);
         }
     }
 }

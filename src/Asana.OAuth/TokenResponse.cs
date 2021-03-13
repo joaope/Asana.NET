@@ -5,15 +5,15 @@ namespace Asana.OAuth
     public sealed class TokenResponse
     {
         [JsonProperty("access_token")]
-        public string AccessToken { get; }
+        internal string AccessToken { get; }
         [JsonProperty("expires_in")]
         public int ExpiresInSeconds { get; }
         [JsonProperty("refresh_token")]
-        public string RefreshToken { get; }
+        internal string RefreshToken { get; }
         [JsonProperty("data")]
         public User AuthenticatedUser { get; }
         [JsonProperty("token_type")]
-        public string TokenType { get; }
+        internal string TokenType { get; }
 
         [JsonConstructor]
         public TokenResponse(string accessToken, int expiresInSeconds, string refreshToken, User authenticatedUser, string tokenType)
