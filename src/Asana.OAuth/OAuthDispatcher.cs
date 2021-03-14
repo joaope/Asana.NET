@@ -30,8 +30,7 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, AsanaClientOptions options) 
-            : base(options.RetryPolicy)
+        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, AsanaClientOptions options)
         {
             if (string.IsNullOrEmpty(clientId))
             {

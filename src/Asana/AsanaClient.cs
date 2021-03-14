@@ -28,7 +28,7 @@ namespace Asana
             }
 
             _options = options;
-            Dispatcher = new AccessTokenDispatcher(_options.RetryPolicy, accessToken);
+            Dispatcher = new AccessTokenDispatcher(accessToken);
         }
 
         public AsanaClient(string accessToken) : this(accessToken, AsanaClientOptions.Default)
@@ -39,7 +39,7 @@ namespace Asana
         public BatchApi BatchApi => new BatchApi(Dispatcher);
         public CustomFields CustomFields => new CustomFields(Dispatcher, _options.DefaultPageSize);
         public CustomFieldSettings CustomFieldSettings => new CustomFieldSettings(Dispatcher, _options.DefaultPageSize);
-        public Events Events => new Events(Dispatcher, _options.DefaultPageSize);
+        public Events Events => new Events(Dispatcher);
         public Jobs Jobs => new Jobs(Dispatcher);
         public OrganizationExports OrganizationExports => new OrganizationExports(Dispatcher);
         public Portfolios Portfolios => new Portfolios(Dispatcher, _options.DefaultPageSize);
@@ -64,7 +64,7 @@ namespace Asana
         {
             private readonly string _accessToken;
 
-            internal AccessTokenDispatcher(RetryPolicyOptions retryPolicy, string accessToken) : base(retryPolicy)
+            internal AccessTokenDispatcher(string accessToken)
             {
                 if (string.IsNullOrEmpty(accessToken))
                 {
