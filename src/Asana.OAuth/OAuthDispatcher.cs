@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
@@ -67,22 +65,13 @@ namespace Asana.OAuth
         {
         }
 
-        protected override async Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override void OnBeforeSendRequest(HttpRequestMessage request)
         {
             if (_tokenResponse != null)
             {
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue(_tokenResponse.TokenType, _tokenResponse.AccessToken);
             }
-
-            var response = await Send(request, cancellationToken);
-
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                await InternalRefreshToken(true);
-            }
-
-            return response;
         }
 
         public async Task<TokenResponse> AuthorizeCode(string code)

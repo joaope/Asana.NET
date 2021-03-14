@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using Asana.Resources;
 
 namespace Asana
@@ -18,6 +16,10 @@ namespace Asana
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
+        public AsanaClient(Dispatcher dispatcher) : this(dispatcher, AsanaClientOptions.Default)
+        {
+        }
+
         public AsanaClient(string accessToken, AsanaClientOptions options)
         {
             if (string.IsNullOrEmpty(accessToken))
@@ -27,6 +29,10 @@ namespace Asana
 
             _options = options;
             Dispatcher = new AccessTokenDispatcher(_options.RetryPolicy, accessToken);
+        }
+
+        public AsanaClient(string accessToken) : this(accessToken, AsanaClientOptions.Default)
+        {
         }
 
         public Attachments Attachments => new Attachments(Dispatcher, _options.DefaultPageSize);
@@ -58,12 +64,6 @@ namespace Asana
         {
             private readonly string _accessToken;
 
-            protected override Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-                return Send(request, cancellationToken);
-            }
-
             internal AccessTokenDispatcher(RetryPolicyOptions retryPolicy, string accessToken) : base(retryPolicy)
             {
                 if (string.IsNullOrEmpty(accessToken))
@@ -72,6 +72,11 @@ namespace Asana
                 }
 
                 _accessToken = accessToken;
+            }
+
+            protected override void OnBeforeSendRequest(HttpRequestMessage request)
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
             }
         }
     }
