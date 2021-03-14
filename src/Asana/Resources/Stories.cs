@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Stories : Resource
     {
-        public Stories(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        public Stories(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<Story> Get(string storyGid)
@@ -26,7 +29,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Story> GetFromTask(string taskGid)
         {
-            return new GetItemsCollectionRequest<Story>(Dispatcher, $"tasks/{taskGid}/stories");
+            return new GetItemsCollectionRequest<Story>(Dispatcher, _defaultPageSize, $"tasks/{taskGid}/stories");
         }
 
         public PostItemRequest<Story> CreateOnTask(string taskGid, object data)

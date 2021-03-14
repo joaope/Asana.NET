@@ -5,13 +5,16 @@ namespace Asana.Resources
 {
     public sealed class Webhooks : Resource
     {
-        public Webhooks(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        public Webhooks(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<Webhook> GetByWorkspace(string workspaceGid, string? resourceType)
         {
-            return new GetItemsCollectionRequest<Webhook>(Dispatcher, "webhooks")
+            return new GetItemsCollectionRequest<Webhook>(Dispatcher, _defaultPageSize, "webhooks")
                 .AddQueryParameter("workspace", workspaceGid)
                 .AddQueryParameter("resource", resourceType);
         }

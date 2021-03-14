@@ -5,13 +5,16 @@ namespace Asana.Resources
 {
     public sealed class Portfolios : Resource
     {
-        internal Portfolios(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Portfolios(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<Portfolio> GetAll()
         {
-            return new GetItemsCollectionRequest<Portfolio>(Dispatcher, "portfolios");
+            return new GetItemsCollectionRequest<Portfolio>(Dispatcher, _defaultPageSize, "portfolios");
         }
 
         public GetItemRequest<Portfolio> Get(string portfolioGid)
@@ -21,7 +24,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Models.AsanaResource> GetItems(string portfolioGid)
         {
-            return new GetItemsCollectionRequest<Models.AsanaResource>(Dispatcher, $"portfolios/{portfolioGid}/items");
+            return new GetItemsCollectionRequest<Models.AsanaResource>(Dispatcher, _defaultPageSize, $"portfolios/{portfolioGid}/items");
         }
 
         public PostItemRequest<Portfolio> Create(object data)

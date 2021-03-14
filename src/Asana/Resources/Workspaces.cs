@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Workspaces : Resource
     {
-        internal Workspaces(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Workspaces(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<Workspace> Get(string workspaceGid)
@@ -16,7 +19,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Workspace> GetAll()
         {
-            return new GetItemsCollectionRequest<Workspace>(Dispatcher, "workspaces");
+            return new GetItemsCollectionRequest<Workspace>(Dispatcher, _defaultPageSize, "workspaces");
         }
 
         public PutItemRequest<Workspace> Update(string workspaceGid, object data)

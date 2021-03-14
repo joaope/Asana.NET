@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class ProjectMemberships : Resource
     {
-        internal ProjectMemberships(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal ProjectMemberships(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<ProjectMembership> Get(string projectMembershipGid)
@@ -16,7 +19,9 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<ProjectMembership> GetByProject(string projectGid)
         {
-            return new GetItemsCollectionRequest<ProjectMembership>(Dispatcher,
+            return new GetItemsCollectionRequest<ProjectMembership>(
+                Dispatcher,
+                _defaultPageSize,
                 $"projects/{projectGid}/project_memberships");
         }
 

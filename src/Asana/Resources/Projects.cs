@@ -6,23 +6,26 @@ namespace Asana.Resources
 {
     public sealed class Projects : Resource
     {
-        internal Projects(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Projects(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<Project> GetByTeam(string teamGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, "projects").AddQueryParameter("team", teamGid);
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, "projects").AddQueryParameter("team", teamGid);
         }
 
         public GetItemsCollectionRequest<Project> GetByWorkspace(string workspaceGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, "projects").AddQueryParameter("workspace", workspaceGid);
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, "projects").AddQueryParameter("workspace", workspaceGid);
         }
 
         public GetItemsCollectionRequest<Project> GetByOrganization(string organizationGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, "projects").AddQueryParameter("workspace", organizationGid);
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, "projects").AddQueryParameter("workspace", organizationGid);
         }
 
         public PostItemRequest<Project> Create(object data)
@@ -57,12 +60,12 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Project> GetTaskProjects(string taskGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, $"tasks/{taskGid}/projects");
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, $"tasks/{taskGid}/projects");
         }
 
         public GetItemsCollectionRequest<Project> GetTeamProjects(string teamGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, $"teams/{teamGid}/projects");
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, $"teams/{teamGid}/projects");
         }
 
         public GetItemsCollectionRequest<Project> GetTeamProjects(string teamGid, bool archived) =>
@@ -75,7 +78,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Project> GetWorkspaceProjects(string workspaceGid)
         {
-            return new GetItemsCollectionRequest<Project>(Dispatcher, $"workspaces/{workspaceGid}/projects");
+            return new GetItemsCollectionRequest<Project>(Dispatcher, _defaultPageSize, $"workspaces/{workspaceGid}/projects");
         }
 
         public GetItemsCollectionRequest<Project> GetWorkspaceProjects(string workspaceGid, bool archived) =>

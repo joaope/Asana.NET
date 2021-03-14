@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Teams : Resource
     {
-        internal Teams(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Teams(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public PostItemRequest<Team> Create(object data)
@@ -21,12 +24,12 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Team> GetOrganizationTeams(string workspaceGid)
         {
-            return new GetItemsCollectionRequest<Team>(Dispatcher, $"organizations/{workspaceGid}/teams");
+            return new GetItemsCollectionRequest<Team>(Dispatcher, _defaultPageSize, $"organizations/{workspaceGid}/teams");
         }
 
         public GetItemsCollectionRequest<Team> GetUserTeams(string userGid)
         {
-            return new GetItemsCollectionRequest<Team>(Dispatcher, $"users/{userGid}/teams");
+            return new GetItemsCollectionRequest<Team>(Dispatcher, _defaultPageSize, $"users/{userGid}/teams");
         }
 
         public PostItemRequest<User> AddUser(string teamGid, object data)

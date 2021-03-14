@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Attachments : Resource
     {
-        internal Attachments(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Attachments(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<Attachment> Get(string attachmentGid)
@@ -21,7 +24,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Attachment> GetByTask(string taskId)
         {
-            return new GetItemsCollectionRequest<Attachment>(Dispatcher, $"tasks/{taskId}/attachments");
+            return new GetItemsCollectionRequest<Attachment>(Dispatcher, _defaultPageSize, $"tasks/{taskId}/attachments");
         }
 
         public PostItemRequest<Attachment> Upload(string taskId, string fileName, byte[] fileData)

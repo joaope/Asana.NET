@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Sections : Resource
     {
-        public Sections(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        public Sections(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<Section> Get(string sectionGid)
@@ -26,7 +29,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Section> GetByProject(string projectGid)
         {
-            return new GetItemsCollectionRequest<Section>(Dispatcher, $"projects/{projectGid}/sections");
+            return new GetItemsCollectionRequest<Section>(Dispatcher, _defaultPageSize, $"projects/{projectGid}/sections");
         }
 
         public PostItemRequest<Section> CreateInProject(string projectGid, object data)

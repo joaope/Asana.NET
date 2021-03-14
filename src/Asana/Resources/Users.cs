@@ -5,13 +5,16 @@ namespace Asana.Resources
 {
     public sealed class Users : Resource
     {
-        internal Users(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Users(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<User> GetAll()
         {
-            return new GetItemsCollectionRequest<User>(Dispatcher, "users");
+            return new GetItemsCollectionRequest<User>(Dispatcher, _defaultPageSize, "users");
         }
 
         public GetItemRequest<User> Get(string userGid)
@@ -25,7 +28,7 @@ namespace Asana.Resources
             string resourceType)
             where TFavouriteResource : Models.AsanaResource
         {
-            return new GetItemsCollectionRequest<TFavouriteResource>(Dispatcher, $"users/{userGid}/favorites")
+            return new GetItemsCollectionRequest<TFavouriteResource>(Dispatcher, _defaultPageSize, $"users/{userGid}/favorites")
                 .AddQueryParameter("workspace", workspaceGid)
                 .AddQueryParameter("resource_type", resourceType);
         }
@@ -57,12 +60,12 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<User> GetTeamUsers(string teamGid)
         {
-            return new GetItemsCollectionRequest<User>(Dispatcher, $"teams/{teamGid}/users");
+            return new GetItemsCollectionRequest<User>(Dispatcher, _defaultPageSize, $"teams/{teamGid}/users");
         }
 
         public GetItemsCollectionRequest<User> GetWorkspaceUsers(string workspaceId)
         {
-            return new GetItemsCollectionRequest<User>(Dispatcher, $"workspaces/{workspaceId}/users");
+            return new GetItemsCollectionRequest<User>(Dispatcher, _defaultPageSize, $"workspaces/{workspaceId}/users");
         }
 
         public GetItemsCollectionRequest<User> GetOrganizationUsers(string organizationId) =>

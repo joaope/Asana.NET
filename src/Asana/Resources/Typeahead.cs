@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class Typeahead : Resource
     {
-        public Typeahead(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        public Typeahead(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<AsanaNamedResource> GetForWorkspace(
@@ -15,7 +18,7 @@ namespace Asana.Resources
             string? query,
             int? count)
         {
-            return new GetItemsCollectionRequest<AsanaNamedResource>(Dispatcher, $"workspaces/{workspaceGid}/typeahead")
+            return new GetItemsCollectionRequest<AsanaNamedResource>(Dispatcher, _defaultPageSize, $"workspaces/{workspaceGid}/typeahead")
                 .AddQueryParameter("resource_type", resourceType)
                 .AddQueryParameter("query", query)
                 .AddQueryParameter("count", count?.ToString());

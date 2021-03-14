@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class ProjectStatuses : Resource
     {
-        public ProjectStatuses(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        public ProjectStatuses(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemRequest<ProjectStatus> Get(string projectStatusGid)
@@ -21,7 +24,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<ProjectStatus> GetFromProject(string projectGid)
         {
-            return new GetItemsCollectionRequest<ProjectStatus>(Dispatcher, $"projects/{projectGid}/project_statuses");
+            return new GetItemsCollectionRequest<ProjectStatus>(Dispatcher, _defaultPageSize, $"projects/{projectGid}/project_statuses");
         }
 
         public PostItemRequest<ProjectStatus> CreateOnProject(string projectGid, object data)

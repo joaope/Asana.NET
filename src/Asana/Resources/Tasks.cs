@@ -7,8 +7,11 @@ namespace Asana.Resources
 {
     public sealed class Tasks : Resource
     {
-        internal Tasks(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal Tasks(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public GetItemsCollectionRequest<Task> GetFiltered(
@@ -19,7 +22,7 @@ namespace Asana.Resources
             DateTime? completedSince,
             DateTime? modifiedSince)
         {
-            return new GetItemsCollectionRequest<Task>(Dispatcher, $"tasks")
+            return new GetItemsCollectionRequest<Task>(Dispatcher, _defaultPageSize, "tasks")
                 .AddQueryParameter("assignee", assigneeGid)
                 .AddQueryParameter("project", projectGid)
                 .AddQueryParameter("section", sectionGid)
@@ -32,7 +35,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<Task> GetFromProject(string projectGid)
         {
-            return new GetItemsCollectionRequest<Task>(Dispatcher, $"projects/{projectGid}/tasks");
+            return new GetItemsCollectionRequest<Task>(Dispatcher, _defaultPageSize, $"projects/{projectGid}/tasks");
         }
 
         public DeleteRequest<Task> Delete(string taskGid)

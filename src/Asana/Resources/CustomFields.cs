@@ -5,8 +5,11 @@ namespace Asana.Resources
 {
     public sealed class CustomFields : Resource
     {
-        internal CustomFields(Dispatcher dispatcher) : base(dispatcher)
+        private readonly uint? _defaultPageSize;
+
+        internal CustomFields(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public PostItemRequest<CustomField> Create(object data)
@@ -31,7 +34,7 @@ namespace Asana.Resources
 
         public GetItemsCollectionRequest<CustomField> GetWorkspaceCustomFields(string workspaceGid)
         {
-            return new GetItemsCollectionRequest<CustomField>(Dispatcher, $"workspaces/{workspaceGid}/custom_fields");
+            return new GetItemsCollectionRequest<CustomField>(Dispatcher, _defaultPageSize, $"workspaces/{workspaceGid}/custom_fields");
         }
 
         public PostItemRequest<EnumOption> CreateEnumOption(string customFieldGid, object data)

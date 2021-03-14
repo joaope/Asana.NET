@@ -11,8 +11,11 @@ namespace Asana.Requests
 {
     public sealed class GetItemsCollectionRequest<TData> : Request where TData : class, IData
     {
-        public GetItemsCollectionRequest(Dispatcher dispatcher, string requestPath) : base(dispatcher, requestPath)
+        private readonly uint? _defaultPageSize;
+
+        public GetItemsCollectionRequest(Dispatcher dispatcher, uint? defaultPageSize, string requestPath) : base(dispatcher, requestPath)
         {
+            _defaultPageSize = defaultPageSize;
         }
 
         public new GetItemsCollectionRequest<TData> AddField(string fieldName) =>
@@ -46,20 +49,15 @@ namespace Asana.Requests
             return await ResultsCollection<TData>.FromHttpResponse(response);
         }
 
-        public Task<ResultsCollection<TData>> Execute() => Execute(CancellationToken.None);
+        public Task<ResultsCollection<TData>> Execute() => Execute( CancellationToken.None);
 
         public Task<ResultsCollection<TData>> Execute(CancellationToken cancellationToken) =>
-            InternalExecute(cancellationToken, null, null);
+            Execute(_defaultPageSize, cancellationToken);
 
-        public Task<ResultsCollection<TData>> Execute(uint limit) => Execute(limit, CancellationToken.None);
+        public Task<ResultsCollection<TData>> Execute(uint? limit) => Execute(limit, CancellationToken.None);
 
-        public Task<ResultsCollection<TData>> Execute(uint limit, CancellationToken cancellationToken)
+        public Task<ResultsCollection<TData>> Execute(uint? limit, CancellationToken cancellationToken)
         {
-            if (limit < 1 || limit > 100)
-            {
-                throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit value must be betwen 1 and 100");
-            }
-
             return InternalExecute(cancellationToken, limit, null);
         }
 
@@ -76,11 +74,17 @@ namespace Asana.Requests
         public Task<ResultsCollection<TData>> ExecuteOffset(string offset) =>
             ExecuteOffset(offset, CancellationToken.None);
 
-        public IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable(uint limit) =>
+        public IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable() =>
+            ExecuteAsEnumerable(_defaultPageSize);
+
+        public IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable(CancellationToken cancellationToken) =>
+            ExecuteAsEnumerable(_defaultPageSize, cancellationToken);
+
+        public IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable(uint? limit) =>
             ExecuteAsEnumerable(limit, CancellationToken.None);
 
         public async IAsyncEnumerable<ResultsCollection<TData>> ExecuteAsEnumerable(
-            uint limit,
+            uint? limit,
             [EnumeratorCancellation]CancellationToken cancellationToken)
         {
             if (limit < 1 || limit > 100)
