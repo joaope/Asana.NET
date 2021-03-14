@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using Asana.Resources;
 
 namespace Asana
@@ -8,8 +12,9 @@ namespace Asana
         private readonly AsanaClientOptions _options;
         public Dispatcher Dispatcher { get; }
 
-        public AsanaClient(Dispatcher dispatcher)
+        public AsanaClient(Dispatcher dispatcher, AsanaClientOptions options)
         {
+            _options = options;
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
@@ -48,5 +53,26 @@ namespace Asana
         public Webhooks Webhooks => new Webhooks(Dispatcher, _options.DefaultPageSize);
         public Workspaces Workspaces => new Workspaces(Dispatcher, _options.DefaultPageSize);
         public WorkspaceMemberships WorkspaceMemberships => new WorkspaceMemberships(Dispatcher, _options.DefaultPageSize);
+
+        private sealed class AccessTokenDispatcher : Dispatcher
+        {
+            private readonly string _accessToken;
+
+            protected override Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+                return Send(request, cancellationToken);
+            }
+
+            internal AccessTokenDispatcher(RetryPolicyOptions retryPolicy, string accessToken) : base(retryPolicy)
+            {
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
+                }
+
+                _accessToken = accessToken;
+            }
+        }
     }
 }

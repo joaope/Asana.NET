@@ -17,8 +17,7 @@ namespace Asana.OAuth
     {
         public const string NativeRedirectUrl = "urn:ietf:wg:oauth:2.0:oob";
 
-        private const string DiscoveryEndpointUrl = "https://app.asana.com/api/1.0/.well-known/openid-configuration";
-
+        private readonly string _discoveryEndpointUrl;
         private readonly string _clientId;
         private readonly string _clientSecret;
         private readonly string? _redirectUrl;
@@ -33,8 +32,8 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, RetryPolicyOptions? retryPolicy) 
-            : base(retryPolicy ?? RetryPolicyOptions.Default)
+        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, AsanaClientOptions options) 
+            : base(options.RetryPolicy)
         {
             if (string.IsNullOrEmpty(clientId))
             {
@@ -49,8 +48,9 @@ namespace Asana.OAuth
             _clientId = clientId;
             _clientSecret = clientSecret;
             _redirectUrl = string.IsNullOrEmpty(redirectUrl) ? NativeRedirectUrl : redirectUrl;
+            _discoveryEndpointUrl = options.ApiBaseUri.ToString();
 
-            _discoveryCache = new DiscoveryCache(DiscoveryEndpointUrl, new DiscoveryPolicy
+            _discoveryCache = new DiscoveryCache(_discoveryEndpointUrl, new DiscoveryPolicy
             {
                 ValidateEndpoints = false
             });
@@ -59,7 +59,7 @@ namespace Asana.OAuth
         }
 
         public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
-            : this(clientId, clientSecret, redirectUrl, null)
+            : this(clientId, clientSecret, redirectUrl, AsanaClientOptions.Default)
         {
         }
 
@@ -92,7 +92,7 @@ namespace Asana.OAuth
             if (discovery.IsError)
             {
                 throw new OAuthException(
-                    $"Error while fetching a new authorization token. OpenID Connect Discovery failed for {DiscoveryEndpointUrl}. " +
+                    $"Error while fetching a new authorization token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
                     discovery.HttpErrorReason,
@@ -151,7 +151,7 @@ namespace Asana.OAuth
                 if (!quiet)
                 {
                     throw new OAuthException(
-                    $"Error while refreshing access token. OpenID Connect Discovery failed for {DiscoveryEndpointUrl}. " +
+                    $"Error while refreshing access token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
                     discovery.HttpErrorReason,
@@ -203,7 +203,7 @@ namespace Asana.OAuth
             if (discovery.IsError)
             {
                 throw new OAuthException(
-                    $"Error while fetching authorization endpoint. OpenID Connect Discovery failed for {DiscoveryEndpointUrl}. " +
+                    $"Error while fetching authorization endpoint. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
                     discovery.HttpErrorReason,
