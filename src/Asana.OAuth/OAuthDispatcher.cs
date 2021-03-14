@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
@@ -17,7 +15,7 @@ namespace Asana.OAuth
     {
         public const string NativeRedirectUrl = "urn:ietf:wg:oauth:2.0:oob";
 
-        private const string DiscoveryEndpointUrl = "https://app.asana.com/api/1.0/.well-known/openid-configuration";
+        private string DiscoveryEndpointUrl => Options.ApiBaseUri.ToString();
 
         private readonly string _clientId;
         private readonly string _clientSecret;
@@ -33,8 +31,7 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, RetryPolicyOptions? retryPolicy) 
-            : base(retryPolicy ?? RetryPolicyOptions.Default)
+        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
         {
             if (string.IsNullOrEmpty(clientId))
             {
@@ -58,31 +55,17 @@ namespace Asana.OAuth
             _authClient = new HttpClient();
         }
 
-        public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl)
-            : this(clientId, clientSecret, redirectUrl, null)
-        {
-        }
-
         public OAuthDispatcher(string clientId, string clientSecret) : this(clientId, clientSecret, NativeRedirectUrl)
         {
         }
 
-        protected override async Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override void OnBefore(HttpRequestMessage request)
         {
             if (_tokenResponse != null)
             {
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue(_tokenResponse.TokenType, _tokenResponse.AccessToken);
             }
-
-            var response = await Send(request, cancellationToken);
-
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                await InternalRefreshToken(true);
-            }
-
-            return response;
         }
 
         public async Task<TokenResponse> AuthorizeCode(string code)
