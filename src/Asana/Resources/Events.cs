@@ -1,26 +1,22 @@
-﻿using Asana.Models;
-using Asana.Requests;
+﻿using Asana.Requests;
 
 namespace Asana.Resources
 {
     public sealed class Events : Resource
     {
-        private readonly uint? _defaultPageSize;
-
-        internal Events(Dispatcher dispatcher, uint? defaultPageSize) : base(dispatcher)
+        internal Events(Dispatcher dispatcher) : base(dispatcher)
         {
-            _defaultPageSize = defaultPageSize;
         }
 
-        public GetItemsCollectionRequest<Event> GetResourceEvents(string resourceGid)
+        public EventRequest Get(string resourceGid)
         {
-            return new GetItemsCollectionRequest<Event>(Dispatcher, _defaultPageSize, "events")
+            return new EventRequest(Dispatcher, "events")
                 .AddQueryParameter("resource", resourceGid);
         }
 
-        public GetItemsCollectionRequest<Event> GetResourceEvents(string resourceGid, string syncToken)
+        public EventRequest Get(string resourceGid, string syncToken)
         {
-            return new GetItemsCollectionRequest<Event>(Dispatcher, _defaultPageSize, "events")
+            return new EventRequest(Dispatcher, "events")
                 .AddQueryParameter("resource", resourceGid)
                 .AddQueryParameter("sync", syncToken);
         }
