@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Asana.Resources;
 
 namespace Asana
@@ -10,15 +8,10 @@ namespace Asana
         private readonly AsanaClientOptions _options;
         public Dispatcher Dispatcher { get; }
 
-        public AsanaClient(Dispatcher dispatcher, AsanaClientOptions options)
+        public AsanaClient(Dispatcher dispatcher)
         {
-            _options = options;
-
             Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-            Dispatcher.Initialize(options);
         }
-
-        public AsanaClient(Dispatcher dispatcher) : this(dispatcher, AsanaClientOptions.Default) { }
 
         public AsanaClient(string accessToken, AsanaClientOptions options)
         {
@@ -28,12 +21,8 @@ namespace Asana
             }
 
             _options = options;
-
-            Dispatcher = new AccessTokenDispatcher(accessToken);
-            Dispatcher.Initialize(options);
+            Dispatcher = new AccessTokenDispatcher(_options.RetryPolicy, accessToken);
         }
-
-        public AsanaClient(string accessToken) : this(accessToken, AsanaClientOptions.Default) { }
 
         public Attachments Attachments => new Attachments(Dispatcher, _options.DefaultPageSize);
         public BatchApi BatchApi => new BatchApi(Dispatcher);
@@ -59,25 +48,5 @@ namespace Asana
         public Webhooks Webhooks => new Webhooks(Dispatcher, _options.DefaultPageSize);
         public Workspaces Workspaces => new Workspaces(Dispatcher, _options.DefaultPageSize);
         public WorkspaceMemberships WorkspaceMemberships => new WorkspaceMemberships(Dispatcher, _options.DefaultPageSize);
-
-        private sealed class AccessTokenDispatcher : Dispatcher
-        {
-            private readonly string _accessToken;
-
-            internal AccessTokenDispatcher(string accessToken)
-            {
-                if (string.IsNullOrEmpty(accessToken))
-                {
-                    throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
-                }
-
-                _accessToken = accessToken;
-            }
-
-            protected override void OnBefore(HttpRequestMessage request)
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            }
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -8,14 +10,17 @@ namespace Asana
 {
     public abstract class Dispatcher
     {
-        protected AsanaClientOptions Options { get; private set; } = AsanaClientOptions.Default;
+        public static Uri ApiBaseUri => new Uri("https://app.asana.com/api/1.0/");
 
+        private readonly RetryPolicyOptions _retryPolicy;
         private readonly HttpClient _httpClient;
 
-        protected Dispatcher()
+        protected Dispatcher(RetryPolicyOptions retryPolicy)
         {
-            _httpClient = new HttpClient
+            _retryPolicy = retryPolicy;
+            _httpClient = new HttpClient(new InternalHttpMessageHandler(HandleSend))
             {
+                BaseAddress = ApiBaseUri,
                 DefaultRequestHeaders =
                 {
                     Accept = { MediaTypeWithQualityHeaderValue.Parse("application/json") }
@@ -23,19 +28,11 @@ namespace Asana
             };
         }
 
-        internal void Initialize(AsanaClientOptions options)
-        {
-            Options = options;
-            _httpClient.BaseAddress = options.ApiBaseUri;
-        }
-        
-        protected abstract void OnBefore(HttpRequestMessage request);
+        protected abstract Task<HttpResponseMessage> HandleSend(HttpRequestMessage request, CancellationToken cancellationToken);
 
         public async Task<HttpResponseMessage> Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            OnBefore(request);
-
-            for (var i = 0; i < Options.RetryPolicy.MaxRetries; i++)
+            for (var i = 0; i < _retryPolicy.MaxRetries; i++)
             {
                 HttpResponseMessage response;
 
@@ -52,10 +49,9 @@ namespace Asana
                         e);
                 }
 
-                if (i < Options.RetryPolicy.MaxRetries &&
-                    Options.RetryPolicy.HttpStatusCodes.Contains(response.StatusCode))
+                if (i < _retryPolicy.MaxRetries && _retryPolicy.HttpStatusCodes.Contains(response.StatusCode))
                 {
-                    await Task.Delay(Options.RetryPolicy.PollInterval, cancellationToken);
+                    await Task.Delay(_retryPolicy.PollInterval, cancellationToken);
                     continue;
                 }
 
@@ -63,6 +59,45 @@ namespace Asana
             }
 
             return await _httpClient.SendAsync(request, cancellationToken);
+        }
+
+        private sealed class InternalHttpMessageHandler : DelegatingHandler
+        {
+            private readonly Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> _sendHandler;
+
+            public InternalHttpMessageHandler(Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> sendHandler) 
+                : base(new HttpClientHandler())
+            {
+                _sendHandler = sendHandler;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+                CancellationToken cancellationToken) => _sendHandler(request, cancellationToken);
+        }
+
+        public static T Do<T>(
+            Func<T> action,
+            TimeSpan retryInterval,
+            int maxAttemptCount = 3)
+        {
+            var exceptions = new List<Exception>();
+
+            for (int attempted = 0; attempted < maxAttemptCount; attempted++)
+            {
+                try
+                {
+                    if (attempted > 0)
+                    {
+                        Thread.Sleep(retryInterval);
+                    }
+                    return action();
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }
+            throw new AggregateException(exceptions);
         }
     }
 }
