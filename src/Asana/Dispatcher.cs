@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Asana
 {
     public abstract class Dispatcher
     {
+        private readonly AsanaClientOptions _options;
         public static Uri ApiBaseUri => new Uri("https://app.asana.com/api/1.0/");
 
         private readonly HttpClient _httpClient;
 
-        protected Dispatcher()
+        protected Dispatcher(AsanaClientOptions options)
         {
+            _options = options;
             _httpClient = new HttpClient
             {
                 BaseAddress = ApiBaseUri,
@@ -30,7 +34,91 @@ namespace Asana
         {
             OnBeforeSendRequest(request);
 
-            return await _httpClient.SendAsync(request, cancellationToken);
+            if (_options.Deprecations.Enabled.HasFeatures)
+            {
+                request.Headers.Add("Asana-Enable", _options.Deprecations.Enabled.ToString());
+            }
+
+            if (_options.Deprecations.Disabled.HasFeatures)
+            {
+                request.Headers.Add("Asana-Disable", _options.Deprecations.Disabled.ToString());
+            }
+
+            var response = await _httpClient.SendAsync(request, cancellationToken);
+
+            if (response.Headers.TryGetValues("Asana-Change", out var changes))
+            {
+                var changesDescriptions = changes.Where(c => !string.IsNullOrEmpty(c)).Select(c =>
+                {
+                    var split = c.Split(';');
+                    string? name = null;
+                    string? info = null;
+                    var affected = false;
+
+                    foreach (var change in split)
+                    {
+                        var item = change.Split('=');
+
+                        if (item.Length != 2)
+                        {
+                            continue;
+                        }
+
+                        switch (item[0].ToLowerInvariant())
+                        {
+                            case "name":
+                                name = item[1];
+                                break;
+                            case "info":
+                                info = item[1];
+                                break;
+                            case "affected":
+                                affected = bool.TryParse(item[1], out var isAffected) && isAffected;
+                                break;
+                        }
+                    }
+
+                    return new
+                    {
+                        Name = name,
+                        Affected = affected,
+                        Info = info
+                    };
+                }).ToArray();
+
+                foreach (var change in changesDescriptions)
+                {
+                    if (_options.Deprecations.LogAffectedRequestsOnly && !change.Affected)
+                    {
+                        continue;
+                    }
+
+                    if (change.Affected)
+                    {
+                        _options.Deprecations.Logger.Log(
+                            _options.Deprecations.AffectedLogLevel,
+                            "This request is affected by the {{ChangeName}} deprecation. " +
+                            "Please visit this url for more info: {{ChangeInfo}}" +
+                            $"Use {nameof(AsanaClientOptions)} to enable/disable features. With " +
+                            "that you can opt in/out to this deprecation and suppress this logging message.",
+                            change.Name,
+                            change.Info);
+                    }
+                    else
+                    {
+                        _options.Deprecations.Logger.Log(
+                            _options.Deprecations.NotAffectedLogLevel,
+                            "A new change '{{ChangeName}}' is being reported by Asana. This request is not affected by it." +
+                            "Please visit this url for more info: {{ChangeInfo}}" +
+                            $"Use {nameof(AsanaClientOptions)} to enable/disable features. With " +
+                            "that you can opt in/out to this deprecation and suppress this logging message.",
+                            change.Name,
+                            change.Info);
+                    }
+                }
+            }
+
+            return response;
         }
     }
 }

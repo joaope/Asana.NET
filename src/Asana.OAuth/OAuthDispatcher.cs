@@ -31,6 +31,7 @@ namespace Asana.OAuth
         }
 
         public OAuthDispatcher(string clientId, string clientSecret, string redirectUrl, AsanaClientOptions options)
+            : base(options)
         {
             if (string.IsNullOrEmpty(clientId))
             {
