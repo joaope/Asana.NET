@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.PersonalAccessToken.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken", "src\Asana.PersonalAccessToken\Asana.PersonalAccessToken.csproj", "{648C5E54-9224-4F24-856A-2FBFB303B544}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.OAuth.DependencyInjection", "src\Asana.OAuth.DependencyInjection\Asana.OAuth.DependencyInjection.csproj", "{783CCED6-7043-4E87-9E2C-033938AD3CB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{648C5E54-9224-4F24-856A-2FBFB303B544}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{648C5E54-9224-4F24-856A-2FBFB303B544}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{648C5E54-9224-4F24-856A-2FBFB303B544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{4DA12050-450A-4624-866F-C07E3E678294} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{944FD431-240A-486E-A1F5-227915E4316A} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{648C5E54-9224-4F24-856A-2FBFB303B544} = {E72D8866-21B1-4630-928E-05248B4657E1}
+		{783CCED6-7043-4E87-9E2C-033938AD3CB6} = {E72D8866-21B1-4630-928E-05248B4657E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}

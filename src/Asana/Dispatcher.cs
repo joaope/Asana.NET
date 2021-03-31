@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Asana
 {
-    public class Dispatcher
+    public abstract class Dispatcher
     {
         private readonly AsanaClientOptions _options;
 
@@ -16,11 +17,23 @@ namespace Asana
         protected Dispatcher(HttpClient httpClient, AsanaClientOptions options)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+
+            _httpClient.BaseAddress = options.ApiBaseUri;
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             _options = options;
         }
 
+        protected Dispatcher(AsanaClientOptions options) : this(new HttpClient(), options)
+        {
+        }
+
+        protected abstract void OnBeforeSendRequest(HttpRequestMessage request);
+
         public async Task<HttpResponseMessage> Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            OnBeforeSendRequest(request);
+
             if (_options.Deprecations.Enabled.HasFeatures)
             {
                 request.Headers.Add("Asana-Enable", _options.Deprecations.Enabled.ToString());

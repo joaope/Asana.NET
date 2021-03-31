@@ -1,26 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-
-namespace Asana.PersonalAccessToken
+﻿namespace Asana.PersonalAccessToken
 {
     public static class ConfigurableAsanaClientExtensions
     {
-        public static IAsanaClient WithPersonalAccessToken(string accessToken, AsanaClientOptions options)
+        public static IAsanaClient WithPersonalAccessToken(
+            this IConfigurableAsanaClient configurableAsanaClient,
+            string accessToken)
         {
-            return AsanaClient
-                .Create(options)
-                .WithDispatcher(new AccessTokenDispatcher(GetHttpClient(options.ApiBaseUri, accessToken), options));
+            return configurableAsanaClient
+                .WithDispatcher(new AccessTokenDispatcher(accessToken, configurableAsanaClient.Options));
         }
-
-        private static HttpClient GetHttpClient(Uri apiBaseUri, string accessToken) => new HttpClient
-        {
-            BaseAddress = apiBaseUri,
-            DefaultRequestHeaders =
-            {
-                Accept = {MediaTypeWithQualityHeaderValue.Parse("application/json")},
-                Authorization = new AuthenticationHeaderValue("Bearer", accessToken)
-            }
-        };
     }
 }

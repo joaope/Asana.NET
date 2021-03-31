@@ -9,14 +9,31 @@ using Newtonsoft.Json;
 
 namespace Asana.OAuth
 {
-    public sealed class OAuthApplication : IOAuthApplication
+    public sealed class OAuthApplicationOptions
     {
         public const string NativeRedirectUrl = "urn:ietf:wg:oauth:2.0:oob";
 
+        public string ClientId { get; }
+        public string ClientSecret { get; }
+        public string RedirectUrl { get; }
+
+        public OAuthApplicationOptions(string clientId, string clientSecret, string redirectUrl)
+        {
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+            RedirectUrl = redirectUrl;
+        }
+
+        public OAuthApplicationOptions(string clientId, string clientSecret)
+            : this(clientId, clientSecret, NativeRedirectUrl)
+        {
+        }
+    }
+
+    public sealed class OAuthApplication : IOAuthApplication
+    {
+        private readonly OAuthApplicationOptions _options;
         private readonly string _discoveryEndpointUrl;
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string? _redirectUrl;
         private readonly DiscoveryCache _discoveryCache;
         private readonly HttpClient _authClient;
 
@@ -28,33 +45,21 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        internal OAuthApplication(Uri apiBaseUri, string clientId, string clientSecret, string redirectUrl)
+        public OAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options, HttpClient authClient)
         {
-            if (string.IsNullOrEmpty(clientId))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(clientId));
-            }
-
-            if (string.IsNullOrEmpty(redirectUrl))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(redirectUrl));
-            }
-
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _redirectUrl = string.IsNullOrEmpty(redirectUrl) ? NativeRedirectUrl : redirectUrl;
-            _discoveryEndpointUrl = apiBaseUri.ToString();
+            _options = oAuthApplicationOptions ?? throw new ArgumentNullException(nameof(oAuthApplicationOptions));
+            _discoveryEndpointUrl = options.ApiBaseUri.ToString();
 
             _discoveryCache = new DiscoveryCache(_discoveryEndpointUrl, new DiscoveryPolicy
             {
                 ValidateEndpoints = false
             });
 
-            _authClient = new HttpClient();
+            _authClient = authClient;
         }
 
-        internal OAuthApplication(Uri apiBaseUri, string clientId, string clientSecret)
-            : this(apiBaseUri, clientId, clientSecret, NativeRedirectUrl)
+        public OAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options)
+            : this(oAuthApplicationOptions, options, new HttpClient())
         {
         }
 
@@ -77,11 +82,11 @@ namespace Asana.OAuth
             {
                 Address = discovery.TokenEndpoint,
 
-                ClientId = _clientId,
-                ClientSecret = _clientSecret,
+                ClientId = _options.ClientId,
+                ClientSecret = _options.ClientSecret,
 
                 Code = code,
-                RedirectUri = _redirectUrl
+                RedirectUri = _options.RedirectUrl
             });
 
             if (response.IsError)
@@ -138,8 +143,8 @@ namespace Asana.OAuth
             var response = await _authClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
                 Address = discovery.TokenEndpoint,
-                ClientId = _clientId,
-                ClientSecret = _clientSecret,
+                ClientId = _options.ClientId,
+                ClientSecret = _options.ClientSecret,
                 RefreshToken = LatestTokenResponse.RefreshToken
             });
 
