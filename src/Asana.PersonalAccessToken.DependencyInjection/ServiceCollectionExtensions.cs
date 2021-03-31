@@ -8,6 +8,7 @@ namespace Asana.PersonalAccessToken.DependencyInjection
         public static IHttpClientBuilder AddAsanaPersonalAccessToken(this IServiceCollection services, string accessToken, AsanaClientOptions options)
         {
             return services
+                .AddSingleton(options)
                 .AddScoped<IAsanaClient, AsanaClient>()
                 .AddHttpClient<AccessTokenDispatcher>(client =>
                 {
