@@ -30,7 +30,7 @@ namespace Asana.OAuth
         }
     }
 
-    public sealed class OAuthApplication : IOAuthApplication
+    public sealed class AsanaOAuthApplication : IAsanaOAuthApplication
     {
         private readonly OAuthApplicationOptions _options;
         private readonly string _discoveryEndpointUrl;
@@ -45,7 +45,7 @@ namespace Asana.OAuth
             set => _discoveryCache.CacheDuration = value;
         }
 
-        public OAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options, HttpClient authClient)
+        public AsanaOAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options, HttpClient authClient)
         {
             _options = oAuthApplicationOptions ?? throw new ArgumentNullException(nameof(oAuthApplicationOptions));
             _discoveryEndpointUrl = options.ApiBaseUri.ToString();
@@ -58,7 +58,7 @@ namespace Asana.OAuth
             _authClient = authClient;
         }
 
-        public OAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options)
+        public AsanaOAuthApplication(OAuthApplicationOptions oAuthApplicationOptions, AsanaClientOptions options)
             : this(oAuthApplicationOptions, options, new HttpClient())
         {
         }

@@ -5,29 +5,29 @@ namespace Asana.OAuth
 {
     public sealed class OAuthDispatcher : Dispatcher
     {
-        private readonly IOAuthApplication _oAuthApplication;
+        private readonly IAsanaOAuthApplication _asanaOAuthApplication;
 
         public OAuthDispatcher(
-            IOAuthApplication oAuthApplication,
+            IAsanaOAuthApplication asanaOAuthApplication,
             HttpClient httpClient,
             AsanaClientOptions options) 
             : base(httpClient, options)
         {
-            _oAuthApplication = oAuthApplication;
+            _asanaOAuthApplication = asanaOAuthApplication;
         }
 
-        public OAuthDispatcher(IOAuthApplication oAuthApplication, AsanaClientOptions options) 
-            : this(oAuthApplication, new HttpClient(), options)
+        public OAuthDispatcher(IAsanaOAuthApplication asanaOAuthApplication, AsanaClientOptions options) 
+            : this(asanaOAuthApplication, new HttpClient(), options)
         {
         }
 
         protected override void OnBeforeSendRequest(HttpRequestMessage request)
         {
-            if (_oAuthApplication.LatestTokenResponse != null)
+            if (_asanaOAuthApplication.LatestTokenResponse != null)
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue(
-                    _oAuthApplication.LatestTokenResponse.TokenType,
-                    _oAuthApplication.LatestTokenResponse.AccessToken);
+                    _asanaOAuthApplication.LatestTokenResponse.TokenType,
+                    _asanaOAuthApplication.LatestTokenResponse.AccessToken);
             }
         }
     }

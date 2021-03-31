@@ -1,4 +1,4 @@
-﻿namespace Asana.OAuth
+﻿namespace Asana.OAuth.Extensions
 {
     public static class ConfigurableAsanaClientExtensions
     {
@@ -6,7 +6,7 @@
             this IConfigurableAsanaClient configurableAsanaClient,
             OAuthApplicationOptions oAuthApplicationOptions)
         {
-            var oAuthApplication = new OAuthApplication(oAuthApplicationOptions, configurableAsanaClient.Options);
+            var oAuthApplication = new AsanaOAuthApplication(oAuthApplicationOptions, configurableAsanaClient.Options);
             var oAuthDispatcher = new OAuthDispatcher(oAuthApplication, configurableAsanaClient.Options);
 
             return configurableAsanaClient.WithDispatcher(oAuthDispatcher);

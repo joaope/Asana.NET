@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Asana.OAuth
 {
-    public interface IOAuthApplication
+    public interface IAsanaOAuthApplication
     {
         TimeSpan ApiDiscoveryCacheDuration { get; }
         TokenResponse? LatestTokenResponse { get; }

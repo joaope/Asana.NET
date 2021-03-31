@@ -1,4 +1,4 @@
-﻿namespace Asana.PersonalAccessToken
+﻿namespace Asana.PersonalAccessToken.Extensions
 {
     public static class ConfigurableAsanaClientExtensions
     {

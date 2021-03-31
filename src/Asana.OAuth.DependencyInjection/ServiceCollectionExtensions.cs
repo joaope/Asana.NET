@@ -12,9 +12,9 @@ namespace Asana.OAuth.DependencyInjection
             return services
                 .AddSingleton(options)
                 .AddSingleton(oAuthApplicationOptions)
-                .AddScoped<IOAuthApplication, OAuthApplication>()
+                .AddScoped<IAsanaOAuthApplication, AsanaOAuthApplication>()
                 .AddScoped<IAsanaClient, AsanaClient>()
-                .AddHttpClient<OAuthApplication>()
+                .AddHttpClient<AsanaOAuthApplication>()
                 .Services
                 .AddHttpClient<Dispatcher, OAuthDispatcher>();
         }
