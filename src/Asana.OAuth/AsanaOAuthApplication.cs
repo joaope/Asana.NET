@@ -115,8 +115,8 @@ namespace Asana.OAuth
                 if (!quiet)
                 {
                     throw new OAuthException(
-                    "Refreshing token failed because the user is not authenticated. " +
-                    $"Try starting OAuth authorization process again by calling '{nameof(AuthorizeCode)}' with a new authorization code.");
+                        "Refreshing token failed because the user is not authenticated. " +
+                        $"Try starting OAuth authorization process again by calling '{nameof(AuthorizeCode)}' with a new authorization code.");
                 }
 
                 return null;
@@ -129,12 +129,12 @@ namespace Asana.OAuth
                 if (!quiet)
                 {
                     throw new OAuthException(
-                    $"Error while refreshing access token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
-                    "Check exception properties for more detailed information.",
-                    discovery.Error,
-                    discovery.HttpErrorReason,
-                    discovery.ErrorType,
-                    discovery.Exception);
+                        $"Error while refreshing access token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
+                        "Check exception properties for more detailed information.",
+                        discovery.Error,
+                        discovery.HttpErrorReason,
+                        discovery.ErrorType,
+                        discovery.Exception);
                 }
 
                 return null;
@@ -166,8 +166,14 @@ namespace Asana.OAuth
                 return null;
             }
 
-            LatestTokenResponse = JsonConvert.DeserializeObject<TokenResponse>(response.Raw);
-            return LatestTokenResponse;
+            var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(response.Raw);
+
+            return LatestTokenResponse = new TokenResponse(
+                tokenResponse.AccessToken,
+                tokenResponse.ExpiresInSeconds,
+                LatestTokenResponse.RefreshToken,
+                tokenResponse.AuthenticatedUser,
+                tokenResponse.TokenType);
         }
 
         public async Task<string> DiscoverAuthorizationUrl(
