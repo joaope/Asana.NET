@@ -24,7 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dependabot", ".dependabot"
 		.dependabot\config.yml = .dependabot\config.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.OAuth", "src\Asana.OAuth\Asana.OAuth.csproj", "{4DA12050-450A-4624-866F-C07E3E678294}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth", "src\Asana.OAuth\Asana.OAuth.csproj", "{4DA12050-450A-4624-866F-C07E3E678294}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.PersonalAccessToken.DependencyInjection", "src\Asana.PersonalAccessToken.DependencyInjection\Asana.PersonalAccessToken.DependencyInjection.csproj", "{944FD431-240A-486E-A1F5-227915E4316A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken", "src\Asana.PersonalAccessToken\Asana.PersonalAccessToken.csproj", "{648C5E54-9224-4F24-856A-2FBFB303B544}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +44,14 @@ Global
 		{4DA12050-450A-4624-866F-C07E3E678294}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DA12050-450A-4624-866F-C07E3E678294}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DA12050-450A-4624-866F-C07E3E678294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944FD431-240A-486E-A1F5-227915E4316A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944FD431-240A-486E-A1F5-227915E4316A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944FD431-240A-486E-A1F5-227915E4316A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944FD431-240A-486E-A1F5-227915E4316A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{648C5E54-9224-4F24-856A-2FBFB303B544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{648C5E54-9224-4F24-856A-2FBFB303B544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{648C5E54-9224-4F24-856A-2FBFB303B544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{648C5E54-9224-4F24-856A-2FBFB303B544}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +62,8 @@ Global
 		{8AA6059D-B608-4079-B2D9-88399B03CB02} = {75A74B2B-126E-4929-9EC5-01F6D006757C}
 		{A8F6C019-F71B-481B-9246-7CE686024DBA} = {9CEE84BE-941D-4D2C-B343-1D5E903AB5D4}
 		{4DA12050-450A-4624-866F-C07E3E678294} = {E72D8866-21B1-4630-928E-05248B4657E1}
+		{944FD431-240A-486E-A1F5-227915E4316A} = {E72D8866-21B1-4630-928E-05248B4657E1}
+		{648C5E54-9224-4F24-856A-2FBFB303B544} = {E72D8866-21B1-4630-928E-05248B4657E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}

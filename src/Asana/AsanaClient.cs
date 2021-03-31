@@ -1,38 +1,26 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Asana.Resources;
+﻿using Asana.Resources;
 
 namespace Asana
 {
-    public sealed class AsanaClient : IAsanaClient
+    public sealed class AsanaClient : IAsanaClient, IConfigurableAsanaClient
     {
-        private AsanaClientOptions Options { get; }
-        public Dispatcher Dispatcher { get; }
+        public AsanaClientOptions Options { get; }
+        public Dispatcher Dispatcher { get; private set; }
 
         public AsanaClient(Dispatcher dispatcher, AsanaClientOptions options)
         {
+            Dispatcher = dispatcher;
             Options = options;
-            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
-        public AsanaClient(Dispatcher dispatcher) : this(dispatcher, AsanaClientOptions.Default)
-        {
-        }
+        public static IConfigurableAsanaClient Create(AsanaClientOptions options) => new ConfigurableAsanaClient(options);
 
-        public AsanaClient(string accessToken, AsanaClientOptions options)
-        {
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
-            }
+        public static IConfigurableAsanaClient Create() => Create(AsanaClientOptions.Default);
 
-            Options = options;
-            Dispatcher = new AccessTokenDispatcher(accessToken, Options);
-        }
-
-        public AsanaClient(string accessToken) : this(accessToken, AsanaClientOptions.Default)
+        public IAsanaClient WithDispatcher(Dispatcher dispatcher)
         {
+            Dispatcher = dispatcher;
+            return this;
         }
 
         public Attachments Attachments => new Attachments(Dispatcher, Options.DefaultPageSize);
@@ -60,24 +48,18 @@ namespace Asana
         public Workspaces Workspaces => new Workspaces(Dispatcher, Options.DefaultPageSize);
         public WorkspaceMemberships WorkspaceMemberships => new WorkspaceMemberships(Dispatcher, Options.DefaultPageSize);
 
-        private sealed class AccessTokenDispatcher : Dispatcher
+        private sealed class ConfigurableAsanaClient : IConfigurableAsanaClient
         {
-            private readonly string _accessToken;
+            public AsanaClientOptions Options { get; }
 
-            internal AccessTokenDispatcher(string accessToken, AsanaClientOptions options)
-                : base(options)
+            public ConfigurableAsanaClient(AsanaClientOptions options)
             {
-                if (string.IsNullOrEmpty(accessToken))
-                {
-                    throw new ArgumentException("Value cannot be null or empty.", nameof(accessToken));
-                }
-
-                _accessToken = accessToken;
+                Options = options;
             }
 
-            protected override void OnBeforeSendRequest(HttpRequestMessage request)
+            public IAsanaClient WithDispatcher(Dispatcher dispatcher)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+                return new AsanaClient(dispatcher, Options);
             }
         }
     }
