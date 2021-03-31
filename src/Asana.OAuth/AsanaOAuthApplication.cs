@@ -37,7 +37,7 @@ namespace Asana.OAuth
         private readonly DiscoveryCache _discoveryCache;
         private readonly HttpClient _authClient;
 
-        public TokenResponse? LatestTokenResponse { get; private set; }
+        public AsanaTokenResponse? LatestTokenResponse { get; private set; }
 
         public TimeSpan ApiDiscoveryCacheDuration
         {
@@ -63,13 +63,13 @@ namespace Asana.OAuth
         {
         }
 
-        public async Task<TokenResponse> AuthorizeCode(string code)
+        public async Task<AsanaTokenResponse> AuthorizeCode(string code)
         {
             var discovery = await _discoveryCache.GetAsync();
 
             if (discovery.IsError)
             {
-                throw new OAuthException(
+                throw new AsanaOAuthException(
                     $"Error while fetching a new authorization token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
@@ -93,7 +93,7 @@ namespace Asana.OAuth
             {
                 LatestTokenResponse = null;
 
-                throw new OAuthException(
+                throw new AsanaOAuthException(
                     "Error while authorizing OAuth code. Check exception properties for more detailed information.",
                     response.Error,
                     response.ErrorDescription,
@@ -102,19 +102,19 @@ namespace Asana.OAuth
                     response.Exception);
             }
 
-            LatestTokenResponse = JsonConvert.DeserializeObject<TokenResponse>(response.Raw);
+            LatestTokenResponse = JsonConvert.DeserializeObject<AsanaTokenResponse>(response.Raw);
             return LatestTokenResponse;
         }
 
-        public Task<TokenResponse> RefreshToken() => InternalRefreshToken(false)!;
+        public Task<AsanaTokenResponse> RefreshToken() => InternalRefreshToken(false)!;
 
-        private async Task<TokenResponse?> InternalRefreshToken(bool quiet)
+        private async Task<AsanaTokenResponse?> InternalRefreshToken(bool quiet)
         {
             if (LatestTokenResponse == null)
             {
                 if (!quiet)
                 {
-                    throw new OAuthException(
+                    throw new AsanaOAuthException(
                         "Refreshing token failed because the user is not authenticated. " +
                         $"Try starting OAuth authorization process again by calling '{nameof(AuthorizeCode)}' with a new authorization code.");
                 }
@@ -128,7 +128,7 @@ namespace Asana.OAuth
             {
                 if (!quiet)
                 {
-                    throw new OAuthException(
+                    throw new AsanaOAuthException(
                         $"Error while refreshing access token. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                         "Check exception properties for more detailed information.",
                         discovery.Error,
@@ -154,7 +154,7 @@ namespace Asana.OAuth
 
                 if (!quiet)
                 {
-                    throw new OAuthException(
+                    throw new AsanaOAuthException(
                         "Error while refreshing authorization access token. Check exception properties for more detailed information.",
                         response.Error,
                         response.ErrorDescription,
@@ -166,9 +166,9 @@ namespace Asana.OAuth
                 return null;
             }
 
-            var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(response.Raw);
+            var tokenResponse = JsonConvert.DeserializeObject<AsanaTokenResponse>(response.Raw);
 
-            return LatestTokenResponse = new TokenResponse(
+            return LatestTokenResponse = new AsanaTokenResponse(
                 tokenResponse.AccessToken,
                 tokenResponse.ExpiresInSeconds,
                 LatestTokenResponse.RefreshToken,
@@ -180,13 +180,13 @@ namespace Asana.OAuth
             string clientId,
             string redirectUrl,
             string? state,
-            IEnumerable<OAuthScope>? scopes)
+            IEnumerable<AsanaOAuthScope>? scopes)
         {
             var discovery = await _discoveryCache.GetAsync();
 
             if (discovery.IsError)
             {
-                throw new OAuthException(
+                throw new AsanaOAuthException(
                     $"Error while fetching authorization endpoint. OpenID Connect Discovery failed for {_discoveryEndpointUrl}. " +
                     "Check exception properties for more detailed information.",
                     discovery.Error,
@@ -195,7 +195,7 @@ namespace Asana.OAuth
                     discovery.Exception);
             }
 
-            scopes ??= new[] {OAuthScope.Default};
+            scopes ??= new[] {AsanaOAuthScope.Default};
 
             var queryStringParams = new NameValueCollection
             {

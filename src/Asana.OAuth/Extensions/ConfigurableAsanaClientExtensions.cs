@@ -7,7 +7,7 @@
             OAuthApplicationOptions oAuthApplicationOptions)
         {
             var oAuthApplication = new AsanaOAuthApplication(oAuthApplicationOptions, configurableAsanaClient.Options);
-            var oAuthDispatcher = new OAuthDispatcher(oAuthApplication, configurableAsanaClient.Options);
+            var oAuthDispatcher = new AsanaOAuthDispatcher(oAuthApplication, configurableAsanaClient.Options);
 
             return configurableAsanaClient.WithDispatcher(oAuthDispatcher);
         }

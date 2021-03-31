@@ -16,7 +16,7 @@ namespace Asana.OAuth.DependencyInjection
                 .AddScoped<IAsanaClient, AsanaClient>()
                 .AddHttpClient<AsanaOAuthApplication>()
                 .Services
-                .AddHttpClient<Dispatcher, OAuthDispatcher>();
+                .AddHttpClient<Dispatcher, AsanaOAuthDispatcher>();
         }
 
         public static IHttpClientBuilder AddAsana(

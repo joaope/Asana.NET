@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 
 namespace Asana.OAuth
 {
-    public sealed class OAuthDispatcher : Dispatcher
+    public sealed class AsanaOAuthDispatcher : Dispatcher
     {
         private readonly IAsanaOAuthApplication _asanaOAuthApplication;
 
-        public OAuthDispatcher(
+        public AsanaOAuthDispatcher(
             IAsanaOAuthApplication asanaOAuthApplication,
             HttpClient httpClient,
             AsanaClientOptions options) 
@@ -16,7 +16,7 @@ namespace Asana.OAuth
             _asanaOAuthApplication = asanaOAuthApplication;
         }
 
-        public OAuthDispatcher(IAsanaOAuthApplication asanaOAuthApplication, AsanaClientOptions options) 
+        public AsanaOAuthDispatcher(IAsanaOAuthApplication asanaOAuthApplication, AsanaClientOptions options) 
             : this(asanaOAuthApplication, new HttpClient(), options)
         {
         }

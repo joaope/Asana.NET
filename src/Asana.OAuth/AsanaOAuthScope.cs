@@ -1,6 +1,6 @@
 ﻿namespace Asana.OAuth
 {
-    public enum OAuthScope
+    public enum AsanaOAuthScope
     {
         Default,
         OpenId,

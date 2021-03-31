@@ -7,13 +7,13 @@ namespace Asana.OAuth
     public interface IAsanaOAuthApplication
     {
         TimeSpan ApiDiscoveryCacheDuration { get; }
-        TokenResponse? LatestTokenResponse { get; }
-        Task<TokenResponse> AuthorizeCode(string code);
-        Task<TokenResponse> RefreshToken();
+        AsanaTokenResponse? LatestTokenResponse { get; }
+        Task<AsanaTokenResponse> AuthorizeCode(string code);
+        Task<AsanaTokenResponse> RefreshToken();
         Task<string> DiscoverAuthorizationUrl(
             string clientId,
             string redirectUrl,
             string? state,
-            IEnumerable<OAuthScope>? scopes);
+            IEnumerable<AsanaOAuthScope>? scopes);
     }
 }

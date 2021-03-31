@@ -2,7 +2,7 @@
 
 namespace Asana.OAuth
 {
-    public sealed class TokenResponse
+    public sealed class AsanaTokenResponse
     {
         [JsonProperty("access_token")]
         internal string AccessToken { get; }
@@ -16,7 +16,7 @@ namespace Asana.OAuth
         internal string TokenType { get; }
 
         [JsonConstructor]
-        public TokenResponse(string accessToken, int expiresInSeconds, string refreshToken, User authenticatedUser, string tokenType)
+        public AsanaTokenResponse(string accessToken, int expiresInSeconds, string refreshToken, User authenticatedUser, string tokenType)
         {
             AccessToken = accessToken;
             ExpiresInSeconds = expiresInSeconds;
