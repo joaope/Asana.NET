@@ -25,7 +25,7 @@ namespace Asana.PersonalAccessToken
 
         protected override void OnBeforeSendRequest(HttpRequestMessage request)
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _asanaAccessTokenOptions);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _asanaAccessTokenOptions.AccessToken);
         }
     }
 }

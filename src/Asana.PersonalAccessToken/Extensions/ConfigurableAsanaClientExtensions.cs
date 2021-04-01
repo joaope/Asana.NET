@@ -7,7 +7,15 @@
             string accessToken)
         {
             return configurableAsanaClient
-                .WithDispatcher(new AsanaAccessTokenDispatcher(accessToken, configurableAsanaClient.Options));
+                .WithDispatcher(new AsanaAccessTokenDispatcher(new AsanaAccessTokenOptions(accessToken), configurableAsanaClient.Options));
+        }
+
+        public static IAsanaClient WithPersonalAccessToken(
+            this IConfigurableAsanaClient configurableAsanaClient,
+            AsanaAccessTokenOptions accessTokenOptions)
+        {
+            return configurableAsanaClient
+                .WithDispatcher(new AsanaAccessTokenDispatcher(accessTokenOptions, configurableAsanaClient.Options));
         }
     }
 }

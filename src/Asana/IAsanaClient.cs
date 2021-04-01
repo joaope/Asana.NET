@@ -4,6 +4,7 @@ namespace Asana
 {
     public interface IAsanaClient
     {
+        AsanaClientOptions Options { get; }
         Dispatcher Dispatcher { get; }
         Attachments Attachments { get; }
         BatchApi BatchApi { get; }

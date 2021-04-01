@@ -26,11 +26,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dependabot", ".dependabot"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth", "src\Asana.OAuth\Asana.OAuth.csproj", "{4DA12050-450A-4624-866F-C07E3E678294}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.PersonalAccessToken.DependencyInjection", "src\Asana.PersonalAccessToken.DependencyInjection\Asana.PersonalAccessToken.DependencyInjection.csproj", "{944FD431-240A-486E-A1F5-227915E4316A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken.DependencyInjection", "src\Asana.PersonalAccessToken.DependencyInjection\Asana.PersonalAccessToken.DependencyInjection.csproj", "{944FD431-240A-486E-A1F5-227915E4316A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken", "src\Asana.PersonalAccessToken\Asana.PersonalAccessToken.csproj", "{648C5E54-9224-4F24-856A-2FBFB303B544}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.OAuth.DependencyInjection", "src\Asana.OAuth.DependencyInjection\Asana.OAuth.DependencyInjection.csproj", "{783CCED6-7043-4E87-9E2C-033938AD3CB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth.DependencyInjection", "src\Asana.OAuth.DependencyInjection\Asana.OAuth.DependencyInjection.csproj", "{783CCED6-7043-4E87-9E2C-033938AD3CB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{12D7AFC6-1613-4B64-A480-70CF07783D9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth.DependencyInjection.Tests.Unit", "tests\Asana.OAuth.DependencyInjection.Tests.Unit\Asana.OAuth.DependencyInjection.Tests.Unit.csproj", "{6464199D-0F09-4268-85EA-6792766CC0FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken.DependencyInjection.Tests.Unit", "tests\Asana.PersonalAccessToken.DependencyInjection.Tests.Unit\Asana.PersonalAccessToken.DependencyInjection.Tests.Unit.csproj", "{7DD30D9B-8C25-4349-9106-565125A123A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +64,14 @@ Global
 		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{783CCED6-7043-4E87-9E2C-033938AD3CB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6464199D-0F09-4268-85EA-6792766CC0FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6464199D-0F09-4268-85EA-6792766CC0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6464199D-0F09-4268-85EA-6792766CC0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6464199D-0F09-4268-85EA-6792766CC0FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD30D9B-8C25-4349-9106-565125A123A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD30D9B-8C25-4349-9106-565125A123A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD30D9B-8C25-4349-9106-565125A123A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD30D9B-8C25-4349-9106-565125A123A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +85,8 @@ Global
 		{944FD431-240A-486E-A1F5-227915E4316A} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{648C5E54-9224-4F24-856A-2FBFB303B544} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{783CCED6-7043-4E87-9E2C-033938AD3CB6} = {E72D8866-21B1-4630-928E-05248B4657E1}
+		{6464199D-0F09-4268-85EA-6792766CC0FE} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
+		{7DD30D9B-8C25-4349-9106-565125A123A9} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}
