@@ -5,7 +5,24 @@
     <LangVersion>8.0</LangVersion>
     <nullable>enable</nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Description>.NET client library for the Asana API</Description>
+    <Summary>.NET client library for the Asana API</Summary>
+    <Copyright>Copyright © joaope 2021</Copyright>
+    <VersionSuffix>${VersionSuffix}</VersionSuffix>
+    <Authors>joaope</Authors>
+    <IsPackable>true</IsPackable>
+    <Product>Asana.NET</Product>
+    <PackageId>Asana</PackageId>
+    <PackageTags>asana;api</PackageTags>
+    <PackageProjectUrl>https://github.com/joaope/Asana.NET</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/joaope/Asana.NET.git</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />

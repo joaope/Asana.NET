@@ -1,0 +1,42 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  publish:
+    name: Publish to github packages
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet-version: ['3.1.407', '5.0.201']
+        include:
+          - dotnet-version: 3.1.407
+            target-framework: netstandard2.0
+            target-framework-tests: netcoreapp3.1
+          - dotnet-version: 5.0.201
+            target-framework: net5.0
+            target-framework-tests: net5.0
+
+    steps:
+      - name: Branch checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+    
+      - name: Clean repo folder and clear nuget cache
+        run: dotnet clean && dotnet nuget locals all --clear
+      
+      - name: Pack
+        run: dotnet pack --configuration Release --output asana_out ./src/Asana/Asana.csproj
+
+      - name: Publish
+        run: dotnet nuget push ./asana_out/*.nupkg --skip-duplicate --no-symbols true
