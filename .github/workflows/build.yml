@@ -16,10 +16,10 @@ jobs:
         include:
           - dotnet: 3.1.407
             target-framework: netstandard2.0
-            target-framwork-tests: netcoreapp3.1
+            target-framework-tests: netcoreapp3.1
           - dotnet: 5.0.201
             target-framework: net5.0
-            target-framwork-tests: net5.0
+            target-framework-tests: net5.0
 
     steps:
       - name: Branch checkout
