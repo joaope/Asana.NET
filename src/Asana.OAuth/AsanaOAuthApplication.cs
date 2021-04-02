@@ -102,8 +102,7 @@ namespace Asana.OAuth
                     response.Exception);
             }
 
-            LatestTokenResponse = JsonConvert.DeserializeObject<AsanaTokenResponse>(response.Raw);
-            return LatestTokenResponse;
+            return LatestTokenResponse = JsonConvert.DeserializeObject<AsanaTokenResponse>(response.Raw)!;
         }
 
         public Task<AsanaTokenResponse> RefreshToken() => InternalRefreshToken(false)!;
@@ -169,7 +168,7 @@ namespace Asana.OAuth
             var tokenResponse = JsonConvert.DeserializeObject<AsanaTokenResponse>(response.Raw);
 
             return LatestTokenResponse = new AsanaTokenResponse(
-                tokenResponse.AccessToken,
+                tokenResponse!.AccessToken,
                 tokenResponse.ExpiresInSeconds,
                 LatestTokenResponse.RefreshToken,
                 tokenResponse.AuthenticatedUser,
