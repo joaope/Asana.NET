@@ -40,14 +40,14 @@ namespace Asana.Models.Results
                     ? new DataCollectionBody<TData>(new TData[0])
                     : JsonConvert.DeserializeObject<DataCollectionBody<TData>>(content);
 
-                return new ResultsCollection<TData>(response.StatusCode, dataBody.Data, dataBody.NextPage);
+                return new ResultsCollection<TData>(response.StatusCode, dataBody!.Data, dataBody.NextPage);
             }
 
             var errorsBody = !string.IsNullOrEmpty(content)
                 ? JsonConvert.DeserializeObject<ErrorsBody>(content)
                 : new ErrorsBody(null);
 
-            return new ResultsCollection<TData>(response.StatusCode, errorsBody.Errors);
+            return new ResultsCollection<TData>(response.StatusCode, errorsBody!.Errors);
         }
     }
 }

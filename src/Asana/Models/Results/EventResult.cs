@@ -15,7 +15,7 @@ namespace Asana.Models.Results
         public string? SyncToken { get; }
         public Error[]? Errors { get; }
         public HttpStatusCode HttpStatusCode { get; private set; }
-        public bool IsError { get; private set; }
+        public bool IsError { get; }
 
         [JsonConstructor]
         internal EventResult(Event[] events, string? syncToken)
@@ -38,7 +38,7 @@ namespace Asana.Models.Results
             if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 var eventResult = JsonConvert.DeserializeObject<EventResult>(content);
-                eventResult.HttpStatusCode = response.StatusCode;
+                eventResult!.HttpStatusCode = response.StatusCode;
 
                 return eventResult;
             }
@@ -47,7 +47,7 @@ namespace Asana.Models.Results
                 ? JsonConvert.DeserializeObject<ErrorsBody>(content)
                 : new ErrorsBody(null);
 
-            return new EventResult(errorsBody.Errors)
+            return new EventResult(errorsBody!.Errors)
             {
                 HttpStatusCode = response.StatusCode
             };
