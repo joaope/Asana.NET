@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
 
   build:
-    name: ${{ matrix.os }} (${{ matrix.dotnet }})
+    name: ${{ matrix.os }} (${{ matrix.dotnet }} - ${{ matrix.target-framework }} / ${{ matrix.target-framework-tests }})
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -35,8 +35,3 @@ jobs:
       
       - name: Build
         run: dotnet build --configuration Release --framework ${{ matrix.target-framework }}
-
-      - name: Test
-        run: dotnet test --configuration Release --framework ${{ matrix.target-framework-tests }}
-
-  
