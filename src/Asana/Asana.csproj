@@ -8,7 +8,7 @@
     <Description>.NET client library for the Asana API</Description>
     <Summary>.NET client library for the Asana API</Summary>
     <Copyright>Copyright © joaope 2021</Copyright>
-    <VersionSuffix>${VersionSuffix}</VersionSuffix>
+    <VersionPrefix>0.9.0</VersionPrefix>
     <Authors>joaope</Authors>
     <IsPackable>true</IsPackable>
     <Product>Asana.NET</Product>
