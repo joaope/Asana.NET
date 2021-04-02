@@ -216,7 +216,7 @@ namespace Asana.OAuth
                     .AllKeys
                     .SelectMany(key => 
                         (source.GetValues(key) ?? Array.Empty<string>())
-                        .Select(value => $"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}"))
+                        .Select(value => $"{Uri.EscapeDataString(key!)}={Uri.EscapeDataString(value)}"))
                     .ToArray());
             }
 
