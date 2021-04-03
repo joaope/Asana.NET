@@ -29,5 +29,8 @@ jobs:
       - name: Pack
         run: dotnet pack --configuration Release --output asana_out ./src/Asana/Asana.csproj
 
-      - name: Publish
+      - name: Publish to Github packages registry
         run: dotnet nuget push ./asana_out/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols true
+
+      - name: Publish to NuGet packages registry
+        run: dotnet nuget push ./asana_out/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols true
