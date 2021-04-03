@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Asana.Tests.Unit
 {
-    public class AsanaClientOptionsTests
+    public sealed class AsanaClientOptionsTests
     {
         [Fact]
         public void AssertDefaultsAgainstEmptyConstructor()
@@ -44,6 +44,17 @@ namespace Asana.Tests.Unit
             Assert.IsType<NullLoggerFactory>(defaultOptions.Deprecations.LoggerFactory);
             Assert.Equal(typeof(AsanaClient), defaultOptions.Deprecations.LoggerType);
             Assert.Equal(LogLevel.Information, defaultOptions.Deprecations.NotAffectedLogLevel);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true, "feature1")]
+        [InlineData(true, "feature1", "feature2")]
+        public void FeaturesList_HasFeatures(bool expectedValue, params string[] initialFeatures)
+        {
+            var features = new AsanaClientOptions.Features(initialFeatures);
+
+            Assert.Equal(expectedValue, features.HasFeatures);
         }
     }
 }

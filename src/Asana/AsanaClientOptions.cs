@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -71,6 +72,20 @@ namespace Asana
             private readonly List<string> _features = new List<string>();
             public int Count => _features.Count;
             public bool IsReadOnly => false;
+
+            public Features()
+            {
+            }
+
+            public Features(params string[] features)
+            {
+                _features.AddRange(features);
+            }
+
+            public Features(IEnumerable<string> features)
+                : this(features?.ToArray() ?? Array.Empty<string>())
+            {
+            }
 
             public void Add(params string[] features) => _features.AddRange(features);
 

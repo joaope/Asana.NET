@@ -21,6 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Asana.Tests.Unit</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE" />
   </ItemGroup>
 
