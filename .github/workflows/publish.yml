@@ -21,7 +21,7 @@ jobs:
         with:
           source-url: https://nuget.pkg.github.com/joaope/index.json
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
       - name: Clean repo folder and clear nuget cache
         run: dotnet clean && dotnet nuget locals all --clear
@@ -30,4 +30,4 @@ jobs:
         run: dotnet pack --configuration Release --output asana_out ./src/Asana/Asana.csproj
 
       - name: Publish
-        run: dotnet nuget push ./asana_out/*.nupkg --skip-duplicate --no-symbols true
+        run: dotnet nuget push ./asana_out/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols true
