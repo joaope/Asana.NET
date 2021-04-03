@@ -1,5 +1,4 @@
-using System.Net.Http;
-using Moq;
+using Asana.Tests.Utils;
 using Xunit;
 
 namespace Asana.Tests.Unit
@@ -30,10 +29,10 @@ namespace Asana.Tests.Unit
         [Fact]
         public void InitializesWithTheGivenDispatcher()
         {
-            var dispatcher = new Mock<Dispatcher>(new HttpClient(), AsanaClientOptions.Default);
-            var client = AsanaClient.Create().WithDispatcher(dispatcher.Object);
+            var dispatcher = new MockDispatcher(AsanaClientOptions.Default);
+            var client = AsanaClient.Create().WithDispatcher(dispatcher);
 
-            Assert.Equal(client.Dispatcher, dispatcher.Object);
+            Assert.Equal(client.Dispatcher, dispatcher);
         }
     }
 }

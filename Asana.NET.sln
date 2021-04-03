@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth.DependencyInjec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken.DependencyInjection.Tests.Unit", "tests\Asana.PersonalAccessToken.DependencyInjection.Tests.Unit\Asana.PersonalAccessToken.DependencyInjection.Tests.Unit.csproj", "{7DD30D9B-8C25-4349-9106-565125A123A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Tests.Unit", "tests\Asana.Tests.Unit\Asana.Tests.Unit.csproj", "{99978C5A-B89B-4B48-8749-08B66B250A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.Tests.Unit", "tests\Asana.Tests.Unit\Asana.Tests.Unit.csproj", "{99978C5A-B89B-4B48-8749-08B66B250A19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Tests.Utils", "tests\Asana.Tests.Utils\Asana.Tests.Utils.csproj", "{628E4A5C-1770-4283-94B6-86EA1B318BA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{99978C5A-B89B-4B48-8749-08B66B250A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99978C5A-B89B-4B48-8749-08B66B250A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99978C5A-B89B-4B48-8749-08B66B250A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{628E4A5C-1770-4283-94B6-86EA1B318BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{628E4A5C-1770-4283-94B6-86EA1B318BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{628E4A5C-1770-4283-94B6-86EA1B318BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{628E4A5C-1770-4283-94B6-86EA1B318BA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{6464199D-0F09-4268-85EA-6792766CC0FE} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
 		{7DD30D9B-8C25-4349-9106-565125A123A9} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
 		{99978C5A-B89B-4B48-8749-08B66B250A19} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
+		{628E4A5C-1770-4283-94B6-86EA1B318BA9} = {12D7AFC6-1613-4B64-A480-70CF07783D9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F59376A1-88A5-4E52-B80E-ACF8DDFCE2CD}
