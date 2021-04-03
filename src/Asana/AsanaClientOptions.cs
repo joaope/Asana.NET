@@ -65,40 +65,47 @@ namespace Asana
             }
         }
 
-        public sealed class Features : IEnumerable<string>
+        public sealed class Features : IList<string>
         {
+            public static Features Empty = new Features();
             private readonly List<string> _features = new List<string>();
+            public int Count => _features.Count;
+            public bool IsReadOnly => false;
 
-            public void Add(params string[] features)
-            {
-                _features.AddRange(features);
-            }
+            public void Add(params string[] features) => _features.AddRange(features);
 
-            public void Remove(string feature)
-            {
-                _features.Remove(feature);
-            }
+            public void Add(string feature) => _features.Add(feature);
 
-            public void RemoveAll()
-            {
-                _features.RemoveAll(f => true);
-            }
+            public void Clear() => _features.Clear();
 
-            public IEnumerator<string> GetEnumerator()
-            {
-                return _features.GetEnumerator();
-            }
+            public bool Contains(string feature) => _features.Contains(feature);
+
+            public void CopyTo(string[] array, int arrayIndex) => _features.CopyTo(array, arrayIndex);
+
+            bool ICollection<string>.Remove(string feature) => _features.Remove(feature);
+
+            public void Remove(string feature) => _features.Remove(feature);
+
+            public void RemoveAll() => _features.RemoveAll(f => true);
+
+            public IEnumerator<string> GetEnumerator() => _features.GetEnumerator();
 
             public bool HasFeatures => _features.Count > 0;
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            public override string ToString()
+            public override string ToString() => string.Join(",", _features);
+
+            public int IndexOf(string feature) => _features.IndexOf(feature);
+
+            public void Insert(int index, string feature) => _features.Insert(index, feature);
+
+            public void RemoveAt(int index) => _features.RemoveAt(index);
+
+            public string this[int index]
             {
-                return string.Join(",", _features);
+                get => _features[index];
+                set => _features[index] = value;
             }
         }
     }
