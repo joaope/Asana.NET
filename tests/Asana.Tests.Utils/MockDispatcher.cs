@@ -5,7 +5,7 @@ namespace Asana.Tests.Utils
 {
     public sealed class MockDispatcher : Dispatcher
     {
-        private readonly Action<HttpRequestMessage> _onBeforeSendRequest = (r) => { };
+        private readonly Action<HttpRequestMessage> _onBeforeSendRequest = r => { };
 
         public MockDispatcher(
             HttpClient httpClient,

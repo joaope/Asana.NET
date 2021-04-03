@@ -20,9 +20,7 @@ namespace Asana.Tests.Unit
             Assert.Equal(defaultOptions.Deprecations.Disabled.Count, options.Deprecations.Disabled.Count);
             Assert.Equal(defaultOptions.Deprecations.Enabled, options.Deprecations.Enabled);
             Assert.Equal(defaultOptions.Deprecations.LogAffectedRequestsOnly, options.Deprecations.LogAffectedRequestsOnly);
-            Assert.Equal(defaultOptions.Deprecations.Logger, options.Deprecations.Logger);
             Assert.Equal(defaultOptions.Deprecations.LoggerFactory.GetType(), options.Deprecations.LoggerFactory.GetType());
-            Assert.Equal(defaultOptions.Deprecations.LoggerType, options.Deprecations.LoggerType);
             Assert.Equal(defaultOptions.Deprecations.NotAffectedLogLevel, options.Deprecations.NotAffectedLogLevel);
         }
 

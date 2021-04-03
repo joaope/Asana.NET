@@ -21,9 +21,7 @@ namespace Asana.Tests.Unit
             Assert.Equal(defaultOptions.Deprecations.Disabled.Count, options.Deprecations.Disabled.Count);
             Assert.Equal(defaultOptions.Deprecations.Enabled, options.Deprecations.Enabled);
             Assert.Equal(defaultOptions.Deprecations.LogAffectedRequestsOnly, options.Deprecations.LogAffectedRequestsOnly);
-            Assert.Equal(defaultOptions.Deprecations.Logger, options.Deprecations.Logger);
             Assert.Equal(defaultOptions.Deprecations.LoggerFactory.GetType(), options.Deprecations.LoggerFactory.GetType());
-            Assert.Equal(defaultOptions.Deprecations.LoggerType, options.Deprecations.LoggerType);
             Assert.Equal(defaultOptions.Deprecations.NotAffectedLogLevel, options.Deprecations.NotAffectedLogLevel);
         }
 
@@ -40,9 +38,7 @@ namespace Asana.Tests.Unit
             Assert.Empty(defaultOptions.Deprecations.Enabled);
             Assert.False(defaultOptions.Deprecations.Enabled.HasFeatures);
             Assert.True(defaultOptions.Deprecations.LogAffectedRequestsOnly);
-            Assert.IsType<NullLogger>(defaultOptions.Deprecations.Logger);
             Assert.IsType<NullLoggerFactory>(defaultOptions.Deprecations.LoggerFactory);
-            Assert.Equal(typeof(AsanaClient), defaultOptions.Deprecations.LoggerType);
             Assert.Equal(LogLevel.Information, defaultOptions.Deprecations.NotAffectedLogLevel);
         }
 
@@ -52,9 +48,15 @@ namespace Asana.Tests.Unit
         [InlineData(true, "feature1", "feature2")]
         public void FeaturesList_HasFeatures(bool expectedValue, params string[] initialFeatures)
         {
-            var features = new AsanaClientOptions.Features(initialFeatures);
+            var features = new AsanaClientOptions
+            {
+                Deprecations =
+                {
+                    Enabled = {initialFeatures}
+                }
+            };
 
-            Assert.Equal(expectedValue, features.HasFeatures);
+            Assert.Equal(expectedValue, features.Deprecations.Enabled.HasFeatures);
         }
     }
 }

@@ -89,6 +89,13 @@ namespace Asana
                 };
             }).ToArray();
 
+            if (changesDescriptions.Length == 0)
+            {
+                return response;
+            }
+
+            var logger = _options.Deprecations.LoggerFactory.CreateLogger<IAsanaClient>();
+            
             foreach (var change in changesDescriptions)
             {
                 if (_options.Deprecations.LogAffectedRequestsOnly && !change.Affected)
@@ -98,10 +105,10 @@ namespace Asana
 
                 if (change.Affected)
                 {
-                    _options.Deprecations.Logger.Log(
+                    logger.Log(
                         _options.Deprecations.AffectedLogLevel,
-                        "This request is affected by the {{ChangeName}} deprecation. " +
-                        "Please visit this url for more info: {{ChangeInfo}}" +
+                        "This request is affected by the '{ChangeName}' deprecation. " +
+                        "Please visit this url for more info: {ChangeInfo}. " +
                         $"Use {nameof(AsanaClientOptions)} to enable/disable features. With " +
                         "that you can opt in/out to this deprecation and suppress this logging message.",
                         change.Name,
@@ -109,10 +116,10 @@ namespace Asana
                 }
                 else
                 {
-                    _options.Deprecations.Logger.Log(
+                    logger.Log(
                         _options.Deprecations.NotAffectedLogLevel,
-                        "A new change '{{ChangeName}}' is being reported by Asana. This request is not affected by it." +
-                        "Please visit this url for more info: {{ChangeInfo}}" +
+                        "A new change '{ChangeName}' is being reported by Asana. This request is not affected by it. " +
+                        "Please visit this url for more info: {ChangeInfo}. " +
                         $"Use {nameof(AsanaClientOptions)} to enable/disable features. With " +
                         "that you can opt in/out to this deprecation and suppress this logging message.",
                         change.Name,

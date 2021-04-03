@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -31,61 +30,32 @@ namespace Asana
         public sealed class DeprecationsOptions
         {
             private ILoggerFactory? _loggerFactory;
-            private Type? _loggerType;
+
             public Features Enabled { get; } = new Features();
 
             public Features Disabled { get; } = new Features();
 
-            public Type LoggerType
-            {
-                get => _loggerType ?? typeof(AsanaClient);
-                set => _loggerType = value;
-            }
-
             public ILoggerFactory LoggerFactory
             {
                 get => _loggerFactory ?? new NullLoggerFactory();
-                set
-                {
-                    _loggerFactory = value;
-                    Logger = _loggerFactory.CreateLogger(LoggerType);
-                }
+                set => _loggerFactory = value;
             }
-
-            public ILogger Logger { get; private set; }
 
             public LogLevel AffectedLogLevel { get; set; } = LogLevel.Warning;
 
             public LogLevel NotAffectedLogLevel { get; set; } = LogLevel.Information;
 
-            public bool LogAffectedRequestsOnly { get; } = true;
-
-            public DeprecationsOptions()
-            {
-                Logger = LoggerFactory.CreateLogger(LoggerType);
-            }
+            public bool LogAffectedRequestsOnly { get; set; } = true;
         }
 
         public sealed class Features : IList<string>
         {
-            public static Features Empty = new Features();
             private readonly List<string> _features = new List<string>();
+
+            internal Features() { }
+            
             public int Count => _features.Count;
             public bool IsReadOnly => false;
-
-            public Features()
-            {
-            }
-
-            public Features(params string[] features)
-            {
-                _features.AddRange(features);
-            }
-
-            public Features(IEnumerable<string> features)
-                : this(features?.ToArray() ?? Array.Empty<string>())
-            {
-            }
 
             public void Add(params string[] features) => _features.AddRange(features);
 

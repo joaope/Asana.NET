@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -8,35 +9,29 @@ namespace Asana.Tests.Utils
 {
     public sealed class MockHttpMessageHandler : HttpMessageHandler
     {
-        private HttpStatusCode _responseStatusCode;
-        public HttpRequestMessage LatestRequest { get; private set; }
+        public HttpRequestMessage LastRequest => Requests.Last();
         public List<HttpRequestMessage> Requests { get; } = new List<HttpRequestMessage>();
 
-        private string _content;
-        private string _mediaType;
+        private readonly HttpResponseMessage _response;
 
         public MockHttpMessageHandler(HttpStatusCode responseStatusCode, string content = "content", string mediaType = "application/json")
         {
-            _content = content;
-            _mediaType = mediaType;
-            _responseStatusCode = responseStatusCode;
+            _response = new HttpResponseMessage(responseStatusCode)
+            {
+                Content = new StringContent(content, null, mediaType)
+            };
         }
 
-        public void SetResponse(HttpStatusCode statusCode, string content = "content", string mediaType = "application/json")
+        public MockHttpMessageHandler(HttpResponseMessage response)
         {
-            _responseStatusCode = statusCode;
-            _content = content;
-            _mediaType = mediaType;
+            _response = response;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Requests.Add(request);
-            LatestRequest = request;
-            return Task.FromResult(new HttpResponseMessage(_responseStatusCode)
-            {
-                Content = new StringContent(_content, null, _mediaType)
-            });
+
+            return Task.FromResult(_response);
         }
 
         public static MockHttpMessageHandler BadRequest => new MockHttpMessageHandler(HttpStatusCode.BadRequest);
