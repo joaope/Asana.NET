@@ -19,6 +19,7 @@ namespace Asana
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
             _httpClient.BaseAddress = options.ApiBaseUri;
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             _options = options;
