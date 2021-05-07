@@ -5,23 +5,35 @@ namespace Asana.Tests.Utils
 {
     public sealed class MockDispatcher : Dispatcher
     {
-        private readonly Action<HttpRequestMessage> _onBeforeSendRequest = r => { };
+        public MockHttpClient HttpClient { get; }
+        private readonly Action<HttpRequestMessage> _onBeforeSendRequest;
 
         public MockDispatcher(
-            HttpClient httpClient,
+            MockHttpClient httpClient,
             AsanaClientOptions options,
             Action<HttpRequestMessage> onBeforeSendRequest) 
             : base(httpClient, options)
         {
+            HttpClient = httpClient;
             _onBeforeSendRequest = onBeforeSendRequest;
         }
 
-        public MockDispatcher(AsanaClientOptions options, Action<HttpRequestMessage> onBeforeSendRequest) : base(options)
+        public MockDispatcher(
+            MockHttpClient httpClient,
+            AsanaClientOptions options)
+            : this(httpClient, options, message => {})
         {
-            _onBeforeSendRequest = onBeforeSendRequest;
         }
 
-        public MockDispatcher(AsanaClientOptions options) : base(options)
+        public MockDispatcher(
+            AsanaClientOptions options)
+            : this(new MockHttpClient(MockHttpMessageHandler.Ok), options, message => { })
+        {
+        }
+
+        public MockDispatcher(
+            MockHttpClient httpClient)
+            : this(httpClient, AsanaClientOptions.Default, message => { })
         {
         }
 
