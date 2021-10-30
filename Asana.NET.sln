@@ -13,16 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_items", "_items", "{9CEE84
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{75A74B2B-126E-4929-9EC5-01F6D006757C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8AA6059D-B608-4079-B2D9-88399B03CB02}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dependabot", ".dependabot", "{A8F6C019-F71B-481B-9246-7CE686024DBA}"
-	ProjectSection(SolutionItems) = preProject
-		.dependabot\config.yml = .dependabot\config.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.OAuth", "src\Asana.OAuth\Asana.OAuth.csproj", "{4DA12050-450A-4624-866F-C07E3E678294}"
@@ -41,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.PersonalAccessToken.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.Tests.Unit", "tests\Asana.Tests.Unit\Asana.Tests.Unit.csproj", "{99978C5A-B89B-4B48-8749-08B66B250A19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Tests.Utils", "tests\Asana.Tests.Utils\Asana.Tests.Utils.csproj", "{628E4A5C-1770-4283-94B6-86EA1B318BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asana.Tests.Utils", "tests\Asana.Tests.Utils\Asana.Tests.Utils.csproj", "{628E4A5C-1770-4283-94B6-86EA1B318BA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,7 +91,6 @@ Global
 		{1E8EB988-5A28-4CFE-8A98-E924F5BD02DD} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{75A74B2B-126E-4929-9EC5-01F6D006757C} = {9CEE84BE-941D-4D2C-B343-1D5E903AB5D4}
 		{8AA6059D-B608-4079-B2D9-88399B03CB02} = {75A74B2B-126E-4929-9EC5-01F6D006757C}
-		{A8F6C019-F71B-481B-9246-7CE686024DBA} = {9CEE84BE-941D-4D2C-B343-1D5E903AB5D4}
 		{4DA12050-450A-4624-866F-C07E3E678294} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{944FD431-240A-486E-A1F5-227915E4316A} = {E72D8866-21B1-4630-928E-05248B4657E1}
 		{648C5E54-9224-4F24-856A-2FBFB303B544} = {E72D8866-21B1-4630-928E-05248B4657E1}
