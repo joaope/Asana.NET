@@ -33,7 +33,7 @@ namespace Asana.Requests
         public new GetItemsCollectionRequest<TData> PrettyOutput(bool pretty) =>
             (GetItemsCollectionRequest<TData>) base.PrettyOutput(pretty);
 
-        private async Task<ResultsCollection<TData>> InternalExecute(CancellationToken cancellationToken, uint? limit, string? offset)
+        private async Task<ResultsCollection<TData>> InternalExecute(uint? limit, string? offset, CancellationToken cancellationToken)
         {
             if (limit.HasValue)
             {
@@ -58,7 +58,7 @@ namespace Asana.Requests
 
         public Task<ResultsCollection<TData>> Execute(uint? limit, CancellationToken cancellationToken)
         {
-            return InternalExecute(cancellationToken, limit, null);
+            return InternalExecute(limit, null, cancellationToken);
         }
 
         public Task<ResultsCollection<TData>> ExecuteOffset(string offset, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ namespace Asana.Requests
                 throw new ArgumentNullException(nameof(offset));
             }
 
-            return InternalExecute(cancellationToken, null, offset);
+            return InternalExecute(null, offset, cancellationToken);
         }
 
         public Task<ResultsCollection<TData>> ExecuteOffset(string offset) =>
@@ -92,13 +92,13 @@ namespace Asana.Requests
                 throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit value must be betwen 1 and 100");
             }
 
-            var pageResult = await InternalExecute(cancellationToken, limit, null);
+            var pageResult = await InternalExecute(limit, null, cancellationToken);
 
             yield return pageResult;
 
             if (pageResult.NextPage != null)
             {
-                yield return await InternalExecute(cancellationToken, limit, pageResult.NextPage.Offset);
+                yield return await InternalExecute(limit, pageResult.NextPage.Offset, cancellationToken);
             }
         }
     }
